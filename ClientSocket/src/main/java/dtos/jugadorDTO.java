@@ -8,6 +8,6 @@ package dtos;
  *
  * @author CISCO
  */
-public class jugadorDTO {
+public class JugadorDTO {
     
 }

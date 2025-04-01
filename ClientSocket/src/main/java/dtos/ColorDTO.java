@@ -10,4 +10,24 @@ package dtos;
  */
 public class ColorDTO {
     
+    int color;
+    
+    public ColorDTO(int color){
+        
+        this.color = color;
+        
+    }
+    
+    public int getColor(){
+        
+        return this.color;
+        
+    }
+    
+    public void setColor(int color){
+        
+        this.color = color;
+        
+    }
+    
 }

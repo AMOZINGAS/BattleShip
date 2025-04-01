@@ -8,6 +8,9 @@ package dtos;
  *
  * @author CISCO
  */
-public enum EstadoPartida {
+public enum EstadoPartidaENUM {
+    EN_CURSO,
+    FINALIZADA,
+    EN_ESPERA
     
 }

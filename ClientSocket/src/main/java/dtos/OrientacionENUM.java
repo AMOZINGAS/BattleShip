@@ -8,6 +8,6 @@ package dtos;
  *
  * @author CISCO
  */
-public enum Resultado {
+public enum OrientacionENUM {
     
 }

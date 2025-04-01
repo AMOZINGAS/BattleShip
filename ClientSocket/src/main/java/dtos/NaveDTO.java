@@ -4,10 +4,16 @@
  */
 package dtos;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author CISCO
  */
-public class Nave {
+public abstract class NaveDTO{
     
+    int Sise;
+    OrientacionENUM orientacion;
+    ArrayList<CasillaDTO> casilla;
+
 }

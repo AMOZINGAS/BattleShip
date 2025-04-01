@@ -8,6 +8,10 @@ package dtos;
  *
  * @author CISCO
  */
-public enum Orientacion {
+public enum EstadoNaveENUM {
+    
+    AVERIADO,
+    HUNDIDO,
+    SIN_DANIO
     
 }

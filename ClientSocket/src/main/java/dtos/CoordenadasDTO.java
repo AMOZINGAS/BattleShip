@@ -10,4 +10,38 @@ package dtos;
  */
 public class CoordenadasDTO {
     
+    int x;
+    int y;
+    
+    public CoordenadasDTO(){
+        
+        this.x = x;
+        this.y = y;
+        
+    }
+    
+    public void setCoordenadasX(int x){
+        
+        this.x = x;
+        
+    }
+    
+    public void setCoordenadasY(int y){
+        
+        this.y = y;
+        
+    }
+    
+    public int getCoordenadasX(){
+        
+        return this.x;
+        
+    }
+    
+    public int getCoordenadasY(){
+        
+        return this.y;
+        
+    }
+    
 }

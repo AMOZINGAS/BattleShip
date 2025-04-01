@@ -8,6 +8,9 @@ package dtos;
  *
  * @author CISCO
  */
-public enum EstadoNave {
+public enum ResultadoENUM {
+    
+    AGUA,
+    IMPACTO
     
 }
