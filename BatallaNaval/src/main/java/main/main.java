@@ -4,6 +4,7 @@
  */
 package main;
 
+import mvp.juegoFR;
 import mvp.menuFR;
 
 /**
@@ -14,8 +15,8 @@ public class main {
     
     public static void main(String[] args){
         
-        menuFR menu = new menuFR();
-        menu.setVisible(true);
+        juegoFR juego = new juegoFR();
+        juego.setVisible(true);
         
         
     }
