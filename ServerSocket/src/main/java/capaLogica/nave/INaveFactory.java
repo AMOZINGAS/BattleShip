@@ -4,10 +4,15 @@
  */
 package capaLogica.nave;
 
+import capaLogica.ENUMs.Orientacion;
+
 /**
  *
  * @author Beto_
  */
 public interface INaveFactory {
     Nave crearBarco();
+    Nave crearSubmarino();
+    Nave crearCrucero();
+    Nave crearPortaAviones();
 }

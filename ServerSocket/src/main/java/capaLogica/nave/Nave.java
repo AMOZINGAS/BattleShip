@@ -48,13 +48,14 @@ public abstract class Nave {
         //Si todas las casillas de la nave fueron atacadas, se hunde
         if(hundida){
             estado = EstadoNave.HUNDIDA;
-            
-            //***Implementar Lógica de verificar GameOver!!
-            
         }else{ 
             //Si alguna de las casillas de la nave no ha sido atacada, solo esta averiada
             estado = EstadoNave.AVERIADA;
         }
+    }
+    
+    public boolean estaHundida(){
+        return estado == EstadoNave.HUNDIDA;
     }
 
     public int getTamanio() {

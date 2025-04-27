@@ -17,6 +17,7 @@ public class Casilla {
 
     public Casilla(Coordenada coordenadas) {
         this.coordenada = coordenadas;
+        atacada =false;
     }
     
     public void ocupar(Nave nave) {
@@ -41,7 +42,12 @@ public class Casilla {
     public void atacar() {
         atacada = true;
         if(estaOcupada()){
-            //implementar logica de nave
+            naveOcupante.recibirImpacto();
+            if(naveOcupante.estaHundida()){
+                System.out.println(naveOcupante.getTipo() + " hundido!!");
+            }else{
+                System.out.println(naveOcupante.getTipo() + "averiado!");
+            }
         }
     }
 
@@ -49,10 +55,10 @@ public class Casilla {
         return coordenada;
     }
 
-    public void setCoordenada(Coordenada coordenada) {
-        this.coordenada = coordenada;
+    public Nave getNaveOcupante() {
+        return naveOcupante;
     }
-
+    
     @Override
     public String toString() {
         return "Casilla{" + "atacada=" + atacada + ", coordenada=" + coordenada + ", naveOcupada=" + naveOcupante + '}';

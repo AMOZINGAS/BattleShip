@@ -8,6 +8,6 @@ package capaLogica.ENUMs;
  *
  * @author Beto_
  */
-public enum EstadoJuego {
-    EN_CURSO, FINALIZADO, EN_ESPERA
+public enum Color {
+    ROJO, AZUL, AMARILLO
 }
