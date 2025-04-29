@@ -4,8 +4,8 @@
  */
 package main;
 
-import mvp.juegoFR;
-import mvp.menuFR;
+import mvp.ColocacionNaves;
+import mvp.Inicio;
 
 /**
  *
@@ -15,8 +15,8 @@ public class main {
     
     public static void main(String[] args){
         
-        juegoFR juego = new juegoFR();
-        juego.setVisible(true);
+        ColocacionNaves xd = new ColocacionNaves();
+        xd.setVisible(true);
         
         
     }

@@ -4,11 +4,13 @@
  */
 package clasesDominio;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author David Campa
  */
-public class Casilla {
+public class Casilla extends JPanel {
     public boolean atacada;
     public Coordenadas coordenadas;
     public Nave nave;
