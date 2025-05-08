@@ -5,6 +5,7 @@
 package com.mycompany.serversocket;
 
 import entity.Juego;
+import entity.SinConfiguracion;
 import entity.StateJuego;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,18 +14,19 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 import mensajes.Mensajes;
+import mensajes.ResCrearPartida;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class Controlador implements Observer {
 
     private static Controlador instance;
     ManejadorCliente clientHandler;
+    ModeloServer modelo = new ModeloServer();
     Server server = Server.getInstance();
     Juego juego = Juego.getInstance();
-    // blackboard vFinal
     private Queue<String> accionesPendientes = new LinkedList<>();
 
     private Controlador() {
@@ -32,17 +34,8 @@ public class Controlador implements Observer {
 
     public void crearPartida(Mensajes mensaje, ManejadorCliente aThis) {
         this.clientHandler = aThis;
-        juego.getEstado().manejarEstado(juego);
+        modelo.crearPartida(juego, mensaje);
     }
-
-//    public void triggerConfiguracionPartida(ManejadorCliente aThis, Mensajes mensaje) {
-//        this.clientHandler = aThis;
-//        accionesPendientes.add("crearFichasNumericas");
-//        accionesPendientes.add("crearComodines");
-//        accionesPendientes.add("crearMazo");
-//
-//        ejecutarSiguienteAccion(mensaje);
-//    }
 
     public static synchronized Controlador getInstance() {
         if (instance == null) {
@@ -51,76 +44,24 @@ public class Controlador implements Observer {
         return instance;
     }
 
-//    public void registrarJugador(Mensajes mensaje, ManejadorCliente aThis) {
-//        this.clientHandler = aThis;
-//        realizarAccion("registrarJugador", mensaje);
-//    }
-//
-//    public void realizarDisparo(Mensajes mensaje, ManejadorCliente aThis){
-//        this.clientHandler = aThis;
-//        realizarAccion("realizarDisparo", mensaje);
-//    }
-//    
     public void unirse(Mensajes mensaje, ManejadorCliente aThis) {
         this.clientHandler = aThis;
-        juego.unirse();
+        modelo.unirsePartida(juego, mensaje);
     }
-//
-//    public void solicitarInicio(Mensajes mensaje, ManejadorCliente aThis) {
-//        this.clientHandler = aThis;
-//        realizarAccion("solicitarInicio", mensaje);
-//    }
-//
-//    public void responderSolicitudInicio(Mensajes mensaje, ManejadorCliente aThis) {
-//        this.clientHandler = aThis;
-//        realizarAccion("responderSolicitudInicio", mensaje);
-//    }
-//
-//    public void triggerIniciarPartida(Mensajes mensaje) {
-//        accionesPendientes.add("repartirFichas");
-//        accionesPendientes.add("asignarTurnos");
-//        accionesPendientes.add("empezarPartida");
-//        
-//        ejecutarSiguienteAccion(mensaje);
-//    }
-//
-//    public void pasarTurno(Mensajes mensaje, ManejadorCliente aThis) {
-//        realizarAccion("pasarTurno", mensaje);
-//    }
-//    
-//    public void tomarFicha(Mensajes mensaje, ManejadorCliente aThis){
-//        this.clientHandler = aThis;
-//        realizarAccion("tomarFicha", mensaje);
-//    }
     
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Mensajes) {
             Mensajes mensaje = (Mensajes) arg;
-//            if (mensaje.getComando().equals("CONFIGURAR_PARTIDA")) {
-//                if (!juego.estaConfigurado()) {
-//                    ejecutarSiguienteAccion(mensaje);
-//                } else {
-//                    System.out.println("El juego ya esta configurado");
-//                }
-//            } 
-//            
-//            
-//            if(mensaje.getComando().equals("INICIAR_PARTIDA")) {
-//                if(!juego.partidaEstaEmpezada()) {
-//                    ejecutarSiguienteAccion(mensaje);
-//                } else {
-//                    System.out.println("Juego ya esta empezado!!!!!");
-//                }
-//            }
-//            
+
+            if(mensaje.getComando().equals("PARTIDA_CREADA")){
+                System.out.println("Empezando cambio de view");
+                server.broadcastMessage(mensaje, clientHandler);
+            }
             if(mensaje.getComando().equals("JUGADOR_UNIDO")) {
                 System.out.println("se unioooo!!");
-                unirse(mensaje, clientHandler);
-            }
-            
-            
-            else {
+                server.broadcastMessage(mensaje, clientHandler);
+            }else {
                 System.out.println("Controlador esta recibiendo esto: " + mensaje.getComando());
                 server.broadcastMessage(mensaje, clientHandler);
             }

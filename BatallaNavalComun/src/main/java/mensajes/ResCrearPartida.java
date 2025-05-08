@@ -6,7 +6,7 @@ package mensajes;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class ResCrearPartida extends Mensajes{
     

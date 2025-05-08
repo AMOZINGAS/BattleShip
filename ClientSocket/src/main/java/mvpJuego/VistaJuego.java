@@ -10,7 +10,7 @@ import mensajes.Mensajes;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class VistaJuego extends javax.swing.JFrame implements Observer{
     

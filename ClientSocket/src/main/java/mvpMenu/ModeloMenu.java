@@ -6,13 +6,11 @@ package mvpMenu;
 
 import cliente.Cliente;
 import java.util.Observable;
-import mensajes.ResUnirse;
-import mvpJuego.ModeloJuego;
 import mensajes.Mensajes;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class ModeloMenu extends Observable{
     
@@ -27,7 +25,7 @@ public class ModeloMenu extends Observable{
         try {
             this.cliente.connectToServer(puerto);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Ocurrio un erro inesperado");;
         }
     }
 

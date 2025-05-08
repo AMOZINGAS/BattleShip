@@ -11,6 +11,7 @@ import java.util.List;
 import mensajes.ResUnirse;
 import entity.EnEsperaEstado;
 import java.util.Observable;
+import mensajes.ResCrearPartida;
 
 /**
  *
@@ -30,7 +31,7 @@ public class Juego extends Observable{
     public Juego() {
 //        this.jugadores = new ArrayList<>();
 //        this.tableros = new ArrayList<>();
-        this.estado = new EnEsperaEstado();
+        this.estado = new SinConfiguracion();
 //        this.gestorTurnos = new GestorTurnos(this);
 //        this.disparos = new ArrayList<>();
     }
@@ -85,6 +86,19 @@ public class Juego extends Observable{
             setChanged();
             notifyObservers(new ResUnirse("JUGADOR_NO_UNIDO"));
         }
+    }
+    
+    public synchronized void crearPartida(){
+        
+        if (instance.getEstado() instanceof SinConfiguracion) {
+            instance.getEstado().manejarEstado(instance);
+            setChanged();
+            notifyObservers(new ResCrearPartida("PARTIDA_CREADA"));
+        } else {
+            setChanged();
+            notifyObservers(new ResCrearPartida("PARTIDA_NO_CREADA"));
+        }
+        
     }
     
     public void setJugador1(Jugador jugador1) {

@@ -4,33 +4,15 @@
  */
 package cliente;
 
-import dtos.JuegoDTO;
-import dtos.JugadorDTO;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import mensajes.Mensajes;
 import mensajes.ManejadorMensajes;
-//import mensajes.ReqConfigurarPartida;
-//import mensajes.ReqCrearPartida;
-//import mensajes.ReqPasarTurno;
-//import mensajes.ReqRegistroJugador;
-//import mensajes.ReqResponderSolicitudInicio;
-//import mensajes.ReqSolicitarInicio;
-//import mensajes.ReqTomarFicha;
 import mensajes.ReqUnirse;
-//import menuMVC.ModeloMenu;
-//import partidaMVC.ModeloJuego;
-
-import dtos.JuegoDTO;
-import dtos.JugadorDTO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.rmi.UnknownHostException;
 import mensajes.ReqCrearPartida;
 
 /**
@@ -63,11 +45,12 @@ public class Cliente {
             System.out.println("Conectado al servidor");
             messageListener = new MessageListener();
             new Thread(messageListener).start();
+        } catch(UnknownHostException e){
+            System.out.println("No se encontro el host con ese puerto");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("No se pudo conectar al servidor");
         }
-
     }
 
     public void desconectar() throws IOException {
@@ -94,30 +77,6 @@ public class Cliente {
         sendMessage(new ReqUnirse());
     }
 
-//    public void registrarJugador(JugadorDTO jugador) {
-//        sendMessage(new ReqRegistroJugador(jugador));
-//    }
-//
-//    public void configurarPartida(JuegoDTO configuracion) {
-//        sendMessage(new ReqConfigurarPartida(configuracion));
-//    }
-//
-//    public void solicitarInicio(JugadorDTO jugador) {
-//        sendMessage(new ReqSolicitarInicio(jugador));
-//    }
-//
-//    public void responderSolicitudInicio(Boolean res, JugadorDTO jugador) {
-//        sendMessage(new ReqResponderSolicitudInicio(res, jugador));
-//    }
-//    
-//    public void pasarTurno(){
-//        sendMessage(new ReqPasarTurno());
-//    }
-//    
-//    public void tomarFicha(JugadorDTO jugador){
-//        sendMessage(new ReqTomarFicha(jugador));
-//    }
-    
     private class MessageListener implements Runnable {
         private boolean running = true;
 

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public abstract class Mensajes implements Serializable {
     private String comando;

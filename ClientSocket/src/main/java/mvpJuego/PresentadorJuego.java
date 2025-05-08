@@ -6,7 +6,7 @@ package mvpJuego;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class PresentadorJuego {
     

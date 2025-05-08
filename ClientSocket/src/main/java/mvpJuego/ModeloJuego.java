@@ -8,7 +8,7 @@ import java.util.Observable;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class ModeloJuego extends Observable{
     

@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class ManejadorMensajes {
     private static final Gson gson = new GsonBuilder()

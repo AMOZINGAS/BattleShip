@@ -9,7 +9,7 @@ import dtos.JugadorDTO;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class ReqDisparo extends Mensajes {
     

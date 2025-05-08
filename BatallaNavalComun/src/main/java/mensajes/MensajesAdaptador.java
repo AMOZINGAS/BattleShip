@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class MensajesAdaptador implements JsonSerializer<Mensajes>, JsonDeserializer<Mensajes> {
     @Override

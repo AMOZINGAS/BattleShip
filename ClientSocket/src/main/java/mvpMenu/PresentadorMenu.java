@@ -6,7 +6,7 @@ package mvpMenu;
 
 /**
  *
- * @author PC
+ * @author Amos Heli Olguin Quiroz
  */
 public class PresentadorMenu {
     
@@ -22,5 +22,8 @@ public class PresentadorMenu {
         modeloMenu.unirseAPartida(puerto);
     }
     
+    public void crearPartida(int puerto){
+        modeloMenu.crearPartida(puerto);
+    }
     
 }

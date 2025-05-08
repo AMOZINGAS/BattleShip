@@ -58,28 +58,6 @@ public class Server {
 
     public void broadcastMessage(Mensajes mensaje, ManejadorCliente sender) {
 
-//        if (mensaje instanceof ResRegistroJugador) {
-//            ResRegistroJugador res = (ResRegistroJugador) mensaje;
-//
-//            ResRegistroJugador resClientes = new ResRegistroJugador("JUGADOR_NUEVO", res.getJugadores(), res.getJugadorNuevoID());
-//            for (ManejadorCliente client : clients) {
-//                if (client == sender) {
-//                    client.sendMessage(mensaje);
-//                } else {
-//
-//                    client.sendMessage(resClientes);
-//                }
-//
-//            }
-//        } else if (mensaje instanceof ResCrearPartida) {
-//            for (ManejadorCliente client : clients) {
-//                client.sendMessage(mensaje);
-//            }
-//        } else if (mensaje instanceof ResConfigurarPartida) {
-//            for (ManejadorCliente client : clients) {
-//                client.sendMessage(mensaje);
-//            }
-//        } else 
         if (mensaje instanceof ResUnirse) {
             for (ManejadorCliente client : clients) {
                 if (client == sender) {
@@ -92,23 +70,6 @@ public class Server {
             }
         }
     }
-//        else if (mensaje instanceof ResSolicitarInicio) {
-//            for (ManejadorCliente client : clients) {
-//                if (client != sender) {
-//                    client.sendMessage(mensaje);
-//                }
-//            }
-//        } else if (mensaje instanceof ResIniciarPartida) {
-//            for (ManejadorCliente client : clients) {
-//                client.sendMessage(mensaje);
-//            }
-//        } else if (mensaje instanceof ResPasarTurno) {
-//            for (ManejadorCliente client : clients) {
-//                client.sendMessage(mensaje);
-//
-//            }
-//        }
-//    }
 
     public void addClient(ManejadorCliente client) {
         clients.add(client);
