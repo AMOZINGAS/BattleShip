@@ -15,6 +15,18 @@ public class Casilla extends JPanel {
     public Coordenadas coordenadas;
     public Nave nave;
     
+    public Casilla(Coordenadas coordenadas){
+        this.coordenadas = coordenadas;
+    }
+    
+    public void setNave(Nave nave){
+        this.nave = nave;
+    }
+    
+    public void quitarNaveDeLaCasilla(){
+        this.nave = null;
+    }
+    
     public Coordenadas getCoordenadas(){
         return coordenadas;
     }

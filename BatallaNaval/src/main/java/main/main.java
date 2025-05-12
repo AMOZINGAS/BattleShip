@@ -4,8 +4,8 @@
  */
 package main;
 
-import mvp.ColocacionNaves;
 import mvp.Inicio;
+import mvp.ColocacionNavesV2;
 
 /**
  *
@@ -15,7 +15,7 @@ public class main {
     
     public static void main(String[] args){
         
-        ColocacionNaves xd = new ColocacionNaves();
+        ColocacionNavesV2 xd = new ColocacionNavesV2();
         xd.setVisible(true);
         
         
