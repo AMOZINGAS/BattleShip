@@ -5,7 +5,7 @@
 package mvp;
 
 import clasesDominio.Casilla;
-import clasesDominio.Coordenadas;
+import clasesDominio.Coordenada;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -47,7 +47,7 @@ public class ColocacionNaves extends javax.swing.JFrame {
 
         for (int fila = 0; fila < filas; fila++) {
             for (int col = 0; col < columnas; col++) {
-                Casilla celda = new Casilla(new Coordenadas(fila, col));
+                Casilla celda = new Casilla(new Coordenada(fila, col));
                 
                 celda.setPreferredSize(new Dimension(TAM, TAM));
                 celda.setBackground(Color.WHITE);

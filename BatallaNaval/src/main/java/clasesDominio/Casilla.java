@@ -12,10 +12,10 @@ import javax.swing.JPanel;
  */
 public class Casilla extends JPanel {
     public boolean atacada;
-    public Coordenadas coordenadas;
+    public Coordenada coordenadas;
     public Nave nave;
     
-    public Casilla(Coordenadas coordenadas){
+    public Casilla(Coordenada coordenadas){
         this.coordenadas = coordenadas;
     }
     
@@ -27,7 +27,7 @@ public class Casilla extends JPanel {
         this.nave = null;
     }
     
-    public Coordenadas getCoordenadas(){
+    public Coordenada getCoordenadas(){
         return coordenadas;
     }
 }

@@ -9,6 +9,6 @@ package clasesDominio;
  * @author David Campa
  */
 public class Disparo {
-    public Coordenadas coordenadas;
+    public Coordenada coordenada;
     public boolean impacto; // en el diagrama dice que deberia ser una enumerador AGUA, IMPACTO se me hace mas facil asi, pero si gustan corregirlo adelante
 }
