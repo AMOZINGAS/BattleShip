@@ -13,7 +13,7 @@ public class CoordenadasDTO {
     int x;
     int y;
     
-    public CoordenadasDTO(){
+    public CoordenadasDTO(int x, int y){
         
         this.x = x;
         this.y = y;

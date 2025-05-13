@@ -5,12 +5,13 @@
 package dtos;
 
 import java.util.ArrayList;
+import javax.swing.JPanel;
 
 /**
  *
  * @author CISCO
  */
-public class MatrizDTO {
+public class MatrizDTO extends JPanel{
     
     ArrayList<CasillaDTO> casillas = new ArrayList();
     ArrayList<NaveDTO> naves = new ArrayList();
@@ -31,6 +32,11 @@ public class MatrizDTO {
         return jugador;
     }
 
+    public void addCasilla(CasillaDTO casilla){
+        casillas.add(casilla);
+        
+    }
+    
     public void setCasillas(ArrayList<CasillaDTO> casillas) {
         this.casillas = casillas;
     }

@@ -18,6 +18,9 @@ import mensajes.ResUnirse;
  */
 public class Server {
 
+    
+    
+    
     private static Server instance;
     private ServerSocket serverSocket;
     private ExecutorService pool;
@@ -80,6 +83,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
+        
         Juego juego = Juego.getInstance();
         Controlador controlador = Controlador.getInstance();
         juego.addObserver(controlador);

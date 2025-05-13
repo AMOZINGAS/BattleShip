@@ -4,8 +4,16 @@
  */
 package mvpJuego;
 
+import dtos.CasillaDTO;
+import dtos.CoordenadasDTO;
+import dtos.MatrizDTO;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.BorderFactory;
 import mensajes.Mensajes;
 
 /**
@@ -14,16 +22,18 @@ import mensajes.Mensajes;
  */
 public class VistaJuego extends javax.swing.JFrame implements Observer{
     
-    private static PresentadorJuego presentadorJuego;
-
+    
+    
     /**
      * Creates new form vistaJuego
      */
     public VistaJuego(PresentadorJuego presentadorJuego) {
         initComponents();
-        this.presentadorJuego = presentadorJuego;
+        
     }
 
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,11 +49,11 @@ public class VistaJuego extends javax.swing.JFrame implements Observer{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 667, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 365, Short.MAX_VALUE)
         );
 
         pack();
