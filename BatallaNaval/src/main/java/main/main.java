@@ -19,8 +19,7 @@ public class main {
         ColocacionNavesV2 xd = new ColocacionNavesV2();
         xd.setVisible(true);
         
-        JuegoV2 juego = new JuegoV2();
-        juego.setVisible(true);
+
         
     }
     

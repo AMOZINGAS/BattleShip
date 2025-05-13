@@ -7,6 +7,7 @@ package mvp;
 import clasesDominio.Casilla;
 import clasesDominio.Jugador;
 import clasesDominio.Nave;
+import clasesDominio.Tablero;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -28,16 +29,27 @@ public class JuegoV2 extends javax.swing.JFrame {
     private static final int filas = 30;
     private static final int columnas = 30;
     
-    public JuegoV2() {
+    private Tablero tableroPropio;
+    private Tablero tableroEnemigo;
+    
+    
+    // Variables declaration - do not modify                     
+    private javax.swing.JPanel TableroPropio;
+    private javax.swing.JPanel TableroEnemigo;
+    // End of variables declaration   
+    
+    public JuegoV2(Tablero propio) {
         setTitle("Batalla Naval en Curso");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(1, 2)); // Dos columnas: un tablero en cada una
 
-        Tablero1 = crearTablero("Tablero enemigo", 1);
-        Tablero2 = crearTablero("Tablero tuyo", 2);
+        tableroPropio = propio;
+        
+        TableroEnemigo = crearTablero("Tablero enemigo", 1, tableroPropio);
+        TableroPropio = crearTablero("Tablero tuyo", 2, tableroPropio);
 
-        add(Tablero1);
-        add(Tablero2);
+        add(TableroEnemigo);
+        add(TableroPropio);
 
         int anchoVentana = columnas * TAM * 2 + 50;
         int altoVentana = filas * TAM + 70;
@@ -46,16 +58,17 @@ public class JuegoV2 extends javax.swing.JFrame {
         setVisible(true);
     }
 
-    private JPanel crearTablero(String nombre, int numeroTablero) {
+    private JPanel crearTablero(String nombre, int numeroTablero, Tablero tablero) {
         JPanel panelTablero = new JPanel();
         panelTablero.setBorder(BorderFactory.createTitledBorder(nombre));
         panelTablero.setLayout(new GridLayout(filas, columnas));
 
         for (int fila = 0; fila < filas; fila++) {
             for (int col = 0; col < columnas; col++) {
+                Casilla casilla = tablero.getCasilla(fila, col); // Asumes que tienes este método en Tablero
                 JPanel celda = new JPanel();
                 celda.setPreferredSize(new Dimension(TAM, TAM));
-                celda.setBackground(Color.WHITE);
+                celda.setBackground(casilla.getBackground());
                 celda.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
                 int f = fila;
@@ -71,11 +84,10 @@ public class JuegoV2 extends javax.swing.JFrame {
                 panelTablero.add(celda);
             }
         }
+
         return panelTablero;
     }
 
-    // Variables declaration - do not modify                     
-    private javax.swing.JPanel Tablero1;
-    private javax.swing.JPanel Tablero2;
-    // End of variables declaration                   
+
+    
 }

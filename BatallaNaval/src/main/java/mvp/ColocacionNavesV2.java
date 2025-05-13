@@ -10,6 +10,9 @@ import clasesDominio.Nave;
 import clasesDominio.Orientacion;
 import static clasesDominio.Orientacion.*;
 import clasesDominio.Tablero;
+import static clasesDominio.Tablero.getColumnas;
+import static clasesDominio.Tablero.getFilas;
+import static clasesDominio.Tablero.getTAM;
 import static clasesDominio.TipoNave.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,16 +30,21 @@ import java.util.List;
  * @author CISCO
  */
 public class ColocacionNavesV2 extends javax.swing.JFrame {
-
-    private static final int TAM = 20; // Tamaño de cada casilla en píxeles
-    private static final int filas = 30;
-    private static final int columnas = 30;
+    
+    private static int TAM;
+    private static int filas;
+    private static int columnas;
+    
 
     public ColocacionNavesV2() {
         setTitle("Coloca tus naves");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-
+        
+        TAM = getTAM();
+        filas = getFilas();
+        columnas = getColumnas();
+        
         // para las naves
         panelConNaves = new JPanel(); //creamos un panel para poder poner ahi las naves que son jlabels
         panelConNaves.setPreferredSize(new Dimension(400, 80)); // altura fija para que se vea el panel, si no, no se ve
@@ -56,6 +64,20 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
         panelConNaves.add(Nave2);
         panelConNaves.add(Nave3);
         panelConNaves.add(Nave4);
+        
+        
+        // esto es para el boton continuar
+        JButton botonTest = new JButton("Continuar");
+        botonTest.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JuegoV2 juego = new JuegoV2(tablero);
+                juego.setVisible(true);
+            }
+        });
+        panelConNaves.add(botonTest);
+        
+        
         
         add(panelConNaves, BorderLayout.NORTH); //añadimos el panel al frame ColocacionNavesV2
         
@@ -186,6 +208,42 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
 
         });
     }
+    
+    public Tablero clonarTablero() {
+        Tablero tableroClon = new Tablero();
+        tableroClon.setLayout(new GridLayout(filas, columnas));
+
+        for (int fila = 0; fila < filas; fila++) {
+            for (int col = 0; col < columnas; col++) {
+                // Obtener la casilla original
+                Casilla original = tablero.getCasilla(fila, col); // asegúrate que tienes este método en Tablero
+                Casilla clon = new Casilla(new Coordenada(fila, col));
+                clon.setPreferredSize(new Dimension(TAM, TAM));
+                clon.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+                // Copiar estado visual
+                clon.setBackground(original.getBackground());
+
+                // Copiar referencia de nave si tiene
+                if (original.nave != null) {
+                    clon.setNave(original.nave); // referencia a la misma nave
+                }
+
+                tableroClon.add(clon);
+                tableroClon.addCasillas(clon);
+            }
+        }
+
+        // Copiar las naves colocadas (si quieres tener acceso a ellas)
+        for (Nave nave : tablero.getNavesColocadas()) {
+            tableroClon.addNaves(nave);
+        }
+
+        return tableroClon;
+    }
+
+
+    
 
     private Nave Nave1;
     private Nave Nave2;
