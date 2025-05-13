@@ -9,5 +9,5 @@ package dtos;
  * @author CISCO
  */
 public enum OrientacionENUM {
-    
+    VERTICAL, HORIZONTAL
 }

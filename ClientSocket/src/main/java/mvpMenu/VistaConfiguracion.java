@@ -4,20 +4,31 @@
  */
 package mvpMenu;
 
+import dtos.BarcoDTO;
 import dtos.CasillaDTO;
 import dtos.CoordenadasDTO;
 import dtos.MatrizDTO;
+import dtos.NaveDTO;
+import dtos.OrientacionENUM;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import static javax.swing.JList.VERTICAL;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import mensajes.Mensajes;
 import mvpJuego.PresentadorJuego;
 
@@ -35,18 +46,24 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
     private MatrizDTO matriz;
     
     public VistaConfiguracion(PresentadorMenu presentador) {
-       
         this.presentador = presentador;
         this.matriz = new MatrizDTO();
         this.presentador = presentador;
         initComponents();
         iniciarTablero(); // creamos el tablero
         this.add(TableroJP, BorderLayout.CENTER); // añadimos el tablero al frame
-
+        
         int anchoVentana = 10 * 40 + 50;
         int altoVentana = 10 * 40 + 70;
         TableroJP.setSize(anchoVentana, altoVentana);
          
+        //Prueba Nave con DTOs
+        NaveDTO barco1 = new BarcoDTO(1, "Barco", VERTICAL);
+        barco1.setBounds(10, 10, 60, 20);
+        hacerArrastrable(barco1); // las hacemos que se puedan arrastrar con el raton 
+        this.add(barco1);
+        
+        
     }
 
     public void iniciarTablero(){
@@ -155,13 +172,15 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton5))
-                    .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton5)))
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
                 .addGap(18, 18, 18)
@@ -219,4 +238,154 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
             }
         }
     }
+    
+    public class ColocacionNavesV2 extends javax.swing.JFrame {
+    
+    private static int TAM;
+    private static int filas;
+    private static int columnas;
+    
+
+//    public ColocacionNavesV2() {
+//        // para las naves
+//        Nave1 = new BarcoDTO(1, "Barco 1", VERTICAL);
+////        Nave2 = new Nave(SUBMARINO, HORIZONTAL, "Nave 2");
+////        Nave3 = new Nave(PORTAVIONES, VERTICAL, "Nave 3");
+////        Nave4 = new Nave(CRUCERO, HORIZONTAL, "Nave 4");
+//        Nave1.setBounds(10, 10, 60, 20);
+////        Nave2.setBounds(100, 10, 60, 20);
+////        Nave3.setBounds(190, 10, 60, 20);
+////        Nave4.setBounds(280, 10, 60, 20);
+//        hacerArrastrable(Nave1); // las hacemos que se puedan arrastrar con el raton 
+////        hacerArrastrable(Nave2);
+////        hacerArrastrable(Nave3);
+////        hacerArrastrable(Nave4);
+//
+//        add(tablero, BorderLayout.CENTER); // añadimos el tablero al frame
+    }
+
+    // metodo para hacer que los JLabels de las naves se puedan arrastrar
+    private void hacerArrastrable(JLabel label) {
+        Point puntoInicial = new Point();
+
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                puntoInicial.setLocation(e.getPoint());
+            }
+        });
+        
+        label.addMouseMotionListener(new MouseMotionAdapter() { // para que los jlabels de las nave se puedan arrastrar
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                Point puntoActual = label.getLocation();
+                int x = puntoActual.x + e.getX() - puntoInicial.x;
+                int y = puntoActual.y + e.getY() - puntoInicial.y;
+                label.setLocation(x, y);
+            }
+        });
+        
+       
+        label.addMouseListener(new MouseAdapter() { // para que se pueda soltar un barco en la casilla
+            @Override
+            public void mousePressed(MouseEvent e) {
+                puntoInicial.setLocation(e.getPoint());
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                Point puntoFinal = SwingUtilities.convertPoint(label, e.getPoint(), TableroJP);
+                Component comp = TableroJP.getComponentAt(puntoFinal);
+                if (comp instanceof CasillaDTO) {
+                    CasillaDTO casillaInicial = (CasillaDTO) comp;
+                    NaveDTO nave = (NaveDTO) label;
+
+                    CoordenadasDTO inicio = casillaInicial.getCoordenada();
+                    int fila = inicio.getCoordenadasX();
+                    int columna = inicio.getCoordenadasY();
+
+                    // Determinar dirección
+                    int dx = 0, dy = 0;
+                    if (nave.getOrientacion() == OrientacionENUM.HORIZONTAL) {
+                        dx = 0;
+                        dy = 1;
+                    } else { // VERTICAL
+                        dx = 1;
+                        dy = 0;
+                    }
+
+                    List<CasillaDTO> casillasOcupadas = new ArrayList<>();
+
+                    // Verificar y recolectar casillas válidas
+                    boolean valido = true;
+                    for (int i = 0; i < nave.getTamanio(); i++) {
+                        int f = fila + i * dx;
+                        int c = columna + i * dy;
+                        if (f >= 10 || c >= 10) {
+                            valido = false;
+                            break;
+                        }
+                        //los "10" son las filas y columnas, tmbn podemos poner una variable en algun lado para definirlas
+                        CasillaDTO celda = (CasillaDTO) TableroJP.getComponent(f * 10 + c);
+                        if (celda.getNaveOcupante() != null) {
+                            valido = false;
+                            break;
+                        }
+
+                        casillasOcupadas.add(celda);
+                    }
+
+                    // Si es válido, pintar y asignar nave
+                    if (valido) {
+                        for (CasillaDTO c : casillasOcupadas) {
+                            c.setBackground(Color.BLACK);
+                            c.setNaveOcupante(nave);
+                        }
+                        nave.setCasillas(casillasOcupadas);
+                        matriz.getNaves().add(nave); // 👈guarda la nave colocada en la lista del tablero
+
+
+                        // Opcional: mover JLabel de la nave fuera del panel de selección
+//                        label.setVisible(false); // o remove(label) si no lo necesitas más
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Colocación inválida: hay colisión o está fuera del tablero.");
+                    }
+                }
+            }
+
+        });
+    }
+    
+//    public TableroDTO clonarTablero() {
+//        TableroDTO tableroClon = new TableroDTO();
+//        tableroClon.setLayout(new GridLayout(filas, columnas));
+//
+//        for (int fila = 0; fila < filas; fila++) {
+//            for (int col = 0; col < columnas; col++) {
+//                // Obtener la casilla original
+//                CasillaDTO original = tablero.getCasilla(fila, col); // asegúrate que tienes este método en Tablero
+//                CasillaDTO clon = new CasillaDTO(new CoordenadasDTO(fila, col));
+//                clon.setPreferredSize(new Dimension(TAM, TAM));
+//                clon.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//
+//                // Copiar estado visual
+//                clon.setBackground(original.getBackground());
+//
+//                // Copiar referencia de nave si tiene
+//                if (original.nave != null) {
+//                    clon.setNave(original.nave); // referencia a la misma nave
+//                }
+//
+//                tableroClon.add(clon);
+//                tableroClon.addCasillas(clon);
+//            }
+//        }
+//
+//        // Copiar las naves colocadas (si quieres tener acceso a ellas)
+//        for (NaveDTO nave : tablero.getNavesColocadas()) {
+//            tableroClon.addNaves(nave);
+//        }
+//
+//        return tableroClon;
+//    }
 }

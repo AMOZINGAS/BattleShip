@@ -11,23 +11,49 @@ import javax.swing.JPanel;
  * @author CISCO
  */
 public class CasillaDTO extends JPanel {
-    
-    CoordenadasDTO coordenadasDTO;
+    private boolean atacada;
+    private CoordenadasDTO coordenada;
+    private NaveDTO naveOcupante;
 
-    public CasillaDTO(CoordenadasDTO coordenadasDTO) {
-        this.coordenadasDTO = coordenadasDTO;
+    public CasillaDTO(CoordenadasDTO coordenadas) {
+        this.coordenada = coordenadas;
+        atacada =false;
     }
     
-    
-
-    public CoordenadasDTO getCoordenadasDTO() {
-        return coordenadasDTO;
+    public void ocupar(NaveDTO nave) {
+        this.naveOcupante = nave;
     }
 
-    public void setCoordenadasDTO(CoordenadasDTO coordenadasDTO) {
-        this.coordenadasDTO = coordenadasDTO;
+    public void desocupar() {
+        this.naveOcupante = null;
+    }
+
+    public boolean estaOcupada() {
+        return naveOcupante != null;
     }
     
-    
-    
+    //Get y sets
+    public boolean estaAtacada() {
+        return atacada;
+    }
+
+    public CoordenadasDTO getCoordenada() {
+        return coordenada;
+    }
+
+    public NaveDTO getNaveOcupante() {
+        return naveOcupante;
+    }
+
+    public void setAtacada(boolean atacada) {
+        this.atacada = atacada;
+    }
+
+    public void setCoordenada(CoordenadasDTO coordenada) {
+        this.coordenada = coordenada;
+    }
+
+    public void setNaveOcupante(NaveDTO naveOcupante) {
+        this.naveOcupante = naveOcupante;
+    }    
 }

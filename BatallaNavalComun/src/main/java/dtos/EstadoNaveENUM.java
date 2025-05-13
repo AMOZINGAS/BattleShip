@@ -10,8 +10,8 @@ package dtos;
  */
 public enum EstadoNaveENUM {
     
-    AVERIADO,
-    HUNDIDO,
-    SIN_DANIO
+    AVERIADA,
+    HUNDIDA,
+    SIN_DANOS
     
 }
