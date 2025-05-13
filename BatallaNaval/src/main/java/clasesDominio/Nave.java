@@ -21,7 +21,8 @@ public class Nave extends JLabel{
     public EstadoNave estado;
     public TipoNave tipo;
     
-    public Nave (TipoNave tipo, Orientacion orientacion){
+    public Nave (TipoNave tipo, Orientacion orientacion, String string){
+        super(string);
         casillas = new ArrayList<>();
         this.tipo = tipo;
         estado = INTACTA;
@@ -45,7 +46,7 @@ public class Nave extends JLabel{
     }
     
     // este metodo es mas que nada informativo por si se requiere en el futuro para verificar si un barco ya esta en alguna casilla
-    // se espera que se use en el tablero o en el juego al momento de poner un barco
+    // se espera que se use en el tablero al momento de poner un barco para verificar y que no choque con otro
     public boolean elBarcoEstaEnEstaCasilla(Casilla casilla){
         if(casillas.contains(casilla)){
             return true;
@@ -82,6 +83,4 @@ public class Nave extends JLabel{
         }
         return coordenadas; 
     }
-
-    
 }

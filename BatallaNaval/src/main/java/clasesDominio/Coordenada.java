@@ -16,4 +16,13 @@ public class Coordenada {
         this.x = x;
         this.y = y;
     }
+    
+    public int getFila(){
+        return x;
+    }
+    
+    public int getColumna(){
+        return y;
+    }
+    
 }

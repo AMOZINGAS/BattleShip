@@ -7,18 +7,28 @@ package mvp;
 import clasesDominio.Casilla;
 import clasesDominio.Coordenada;
 import clasesDominio.Nave;
-import static clasesDominio.Orientacion.VERTICAL;
-import static clasesDominio.TipoNave.SUBMARINO;
+import clasesDominio.Orientacion;
+import static clasesDominio.Orientacion.*;
+import clasesDominio.Tablero;
+import static clasesDominio.TipoNave.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Point;
 import javax.swing.*;
-import java.awt.*;
+
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author CISCO
  */
 public class ColocacionNavesV2 extends javax.swing.JFrame {
 
-    private static final int TAM = 15; // Tamaño de cada casilla en píxeles
+    private static final int TAM = 20; // Tamaño de cada casilla en píxeles
     private static final int filas = 30;
     private static final int columnas = 30;
 
@@ -30,10 +40,10 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
         // para las naves
         panelConNaves = new JPanel(); //creamos un panel para poder poner ahi las naves que son jlabels
         panelConNaves.setPreferredSize(new Dimension(400, 80)); // altura fija para que se vea el panel, si no, no se ve
-        Nave1 = new JLabel("Nave 1");
-        Nave2 = new JLabel("Nave 2");
-        Nave3 = new JLabel("Nave 3");
-        Nave4 = new JLabel("Nave 4");
+        Nave1 = new Nave(BARCO, VERTICAL, "Nave 1");
+        Nave2 = new Nave(SUBMARINO, HORIZONTAL, "Nave 2");
+        Nave3 = new Nave(PORTAVIONES, VERTICAL, "Nave 3");
+        Nave4 = new Nave(CRUCERO, HORIZONTAL, "Nave 4");
         Nave1.setBounds(10, 10, 60, 20);
         Nave2.setBounds(100, 10, 60, 20);
         Nave3.setBounds(190, 10, 60, 20);
@@ -49,9 +59,8 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
         
         add(panelConNaves, BorderLayout.NORTH); //añadimos el panel al frame ColocacionNavesV2
         
-        // para el tablero
         inicializarTablero(); // creamos el tablero
-        add(Tablero, BorderLayout.CENTER); // añadimos el tablero al frame
+        add(tablero, BorderLayout.CENTER); // añadimos el tablero al frame
 
         // para el tamaño de la ventana
         int anchoVentana = columnas * TAM + 50;
@@ -61,10 +70,10 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
         setVisible(true);
     }
 
-    // metodo para crear o inicializar el atributo tablero
+    // metodo para crear o inicializar el Tablero
     private void inicializarTablero() {
-        Tablero = new JPanel();
-        Tablero.setLayout(new GridLayout(filas, columnas));
+        tablero = new Tablero();
+        tablero.setLayout(new GridLayout(filas, columnas));
 
         for (int fila = 0; fila < filas; fila++) {
             for (int col = 0; col < columnas; col++) {
@@ -80,7 +89,9 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
                 celda.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) { System.out.println("Clic en Fila: " + f + ", Columna: " + c);}});
-                    Tablero.add(celda);}
+                    tablero.add(celda);
+                    tablero.addCasillas(celda); 
+            }
         }
     }
 
@@ -114,21 +125,72 @@ public class ColocacionNavesV2 extends javax.swing.JFrame {
             
             @Override
             public void mouseReleased(MouseEvent e) {
-                Point puntoFinal = SwingUtilities.convertPoint(label, e.getPoint(), Tablero);
-                Component comp = Tablero.getComponentAt(puntoFinal);
+                Point puntoFinal = SwingUtilities.convertPoint(label, e.getPoint(), tablero);
+                Component comp = tablero.getComponentAt(puntoFinal);
                 if (comp instanceof Casilla) {
-                    Casilla casilla = (Casilla) comp;
-                    casilla.setBackground(Color.BLACK);
-                    casilla.setNave(new Nave(SUBMARINO, VERTICAL));
+                    Casilla casillaInicial = (Casilla) comp;
+                    Nave nave = (Nave) label;
+
+                    Coordenada inicio = casillaInicial.getCoordenadas();
+                    int fila = inicio.getFila();
+                    int columna = inicio.getColumna();
+
+                    // Determinar dirección
+                    int dx = 0, dy = 0;
+                    if (nave.getOrientacion() == Orientacion.HORIZONTAL) {
+                        dx = 0;
+                        dy = 1;
+                    } else { // VERTICAL
+                        dx = 1;
+                        dy = 0;
+                    }
+
+                    List<Casilla> casillasOcupadas = new ArrayList<>();
+
+                    // Verificar y recolectar casillas válidas
+                    boolean valido = true;
+                    for (int i = 0; i < nave.getCantidadCasillas(); i++) {
+                        int f = fila + i * dx;
+                        int c = columna + i * dy;
+                        if (f >= filas || c >= columnas) {
+                            valido = false;
+                            break;
+                        }
+
+                        Casilla celda = (Casilla) tablero.getComponent(f * columnas + c);
+                        if (celda.nave != null) {
+                            valido = false;
+                            break;
+                        }
+
+                        casillasOcupadas.add(celda);
+                    }
+
+                    // Si es válido, pintar y asignar nave
+                    if (valido) {
+                        for (Casilla c : casillasOcupadas) {
+                            c.setBackground(Color.BLACK);
+                            c.setNave(nave);
+                            nave.addCasillas(c);
+                        }
+                    tablero.addNaves(nave); // 👈guarda la nave colocada en la lista del tablero
+
+
+                        // Opcional: mover JLabel de la nave fuera del panel de selección
+                        label.setVisible(false); // o remove(label) si no lo necesitas más
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Colocación inválida: hay colisión o está fuera del tablero.");
+                    }
                 }
             }
+
         });
     }
 
-    private javax.swing.JLabel Nave1;
-    private javax.swing.JLabel Nave2;
-    private javax.swing.JLabel Nave3;
-    private javax.swing.JLabel Nave4;
-    private javax.swing.JPanel Tablero;
+    private Nave Nave1;
+    private Nave Nave2;
+    private Nave Nave3;
+    private Nave Nave4;
+    private Tablero tablero;
     private javax.swing.JPanel panelConNaves;
 }
