@@ -19,16 +19,16 @@ public class Jugador {
     private List<Nave> flotilla;
     private List<Disparo> disparos;
     private Color color;
-    private Tablero tableroPropio;
-    private Tablero tableroDisparos;
+//    private Tablero tableroPropio;
+//    private Tablero tableroDisparos;
 
     public Jugador(String nombre, Color color) {
         this.nombre = nombre;
         this.flotilla = new ArrayList<>();
         this.disparos = new ArrayList<>();
         this.color = color;
-        this.tableroPropio = new Tablero(this);
-        this.tableroDisparos = new Tablero(null);
+//        this.tableroPropio = new Tablero(this);
+//        this.tableroDisparos = new Tablero(null);
     }
 
     public String getNombre() {
@@ -37,6 +37,10 @@ public class Jugador {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public void setFlotilla(List<Nave> flotilla){
+        this.flotilla = flotilla;
     }
 
     public List<Nave> getFlotilla() {
@@ -52,7 +56,7 @@ public class Jugador {
     }
 
     public void agregarDisparo(Disparo disparo) {
-        this.tableroDisparos.registrarDisparo(disparo);
+//        this.tableroDisparos.registrarDisparo(disparo);
         this.disparos.add(disparo);
     }
 
@@ -64,11 +68,11 @@ public class Jugador {
         this.color = color;
     }
 
-    public Tablero getTableroPropio() {
-        return tableroPropio;
-    }
-
-    public Tablero getTableroDisparos() {
-        return tableroDisparos;
-    }
+//    public Tablero getTableroPropio() {
+//        return tableroPropio;
+//    }
+//
+//    public Tablero getTableroDisparos() {
+//        return tableroDisparos;
+//    }
 }

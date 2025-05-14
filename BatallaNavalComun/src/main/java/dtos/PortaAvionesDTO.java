@@ -8,6 +8,13 @@ package dtos;
  *
  * @author CISCO
  */
-public class PortaAvionesDTO {
+public class PortaAvionesDTO extends NaveDTO{
+    
+    public PortaAvionesDTO(int tamanio, String tipo, int orientacion) {
+        super(tamanio, tipo, orientacion);
+    }
+    public String getTipo() {
+        return "PortaAviones";
+    }
     
 }

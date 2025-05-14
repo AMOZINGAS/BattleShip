@@ -8,6 +8,13 @@ package dtos;
  *
  * @author CISCO
  */
-public class SubmarinoDTO {
+public class SubmarinoDTO extends NaveDTO{
+    
+    public SubmarinoDTO(int tamanio, String tipo, int orientacion) {
+        super(tamanio, tipo, orientacion);
+    }
+    public String getTipo() {
+        return "Submarino";
+    }
     
 }

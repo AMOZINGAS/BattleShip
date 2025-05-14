@@ -4,6 +4,7 @@
  */
 package entity;
 
+import dtos.CoordenadasDTO;
 import entity.EstadoNave;
 import entity.Orientacion;
 import java.util.ArrayList;
@@ -18,12 +19,14 @@ public abstract class Nave {
     private Orientacion orientacion;
     private List<Casilla> casillas;
     private EstadoNave estado;
+    private Coordenada coordenadaInicial;
     
     public Nave(int tamanio){
         this.tamanio = tamanio;
         this.casillas = new ArrayList<>();
         this.estado = EstadoNave.SIN_DAÑOS;
         this.orientacion = Orientacion.VERTICAL;
+        this.coordenadaInicial = coordenadaInicial;
     }
     
     /**
@@ -69,6 +72,16 @@ public abstract class Nave {
         return orientacion;
     }
 
+    public Coordenada getCoordenadaInicial() {
+        return coordenadaInicial;
+    }
+
+    public void setCoordenadaInicial(Coordenada coordenadaInicial) {
+        this.coordenadaInicial = coordenadaInicial;
+    }
+
+    
+    
     public void setOrientacion(Orientacion orientacion) {
         this.orientacion = orientacion;
     }

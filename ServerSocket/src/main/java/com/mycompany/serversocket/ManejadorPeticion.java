@@ -39,6 +39,9 @@ public class ManejadorPeticion {
                 break;
             case "UNIRSE":
                 handleUnirse((ReqUnirse) mensaje);
+                break;
+            case "REGISTRAR_JUGADOR":
+                handleRegistrarJugador(mensaje);
             default:
 
         }
@@ -48,6 +51,10 @@ public class ManejadorPeticion {
         controlador.crearPartida(mensaje, clientHandler);
     }
 
+    private void handleRegistrarJugador(Mensajes mensaje){
+        
+        controlador.registrarJugador(mensaje, clientHandler);
+    }
     
     private void handleUnirse(ReqUnirse mensaje) {
         controlador.unirse(mensaje, clientHandler);

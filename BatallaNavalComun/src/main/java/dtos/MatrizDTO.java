@@ -15,9 +15,11 @@ public class MatrizDTO extends JPanel{
     
     ArrayList<CasillaDTO> casillas = new ArrayList();
     ArrayList<NaveDTO> naves = new ArrayList();
-    JugadorDTO jugador = new JugadorDTO();
+    JugadorDTO jugador;
 
-    public MatrizDTO() {
+    public MatrizDTO(JugadorDTO jugador) {
+    this.jugador = this.jugador;
+    
     }
 
     public ArrayList<CasillaDTO> getCasillas() {
@@ -28,9 +30,9 @@ public class MatrizDTO extends JPanel{
         return naves;
     }
 
-    public JugadorDTO getJugador() {
-        return jugador;
-    }
+//    public JugadorDTO getJugador() {
+//        return jugador;
+//    }
 
     public void addCasilla(CasillaDTO casilla){
         casillas.add(casilla);
@@ -45,10 +47,10 @@ public class MatrizDTO extends JPanel{
         this.naves = naves;
     }
 
-    public void setJugador(JugadorDTO jugador) {
-        this.jugador = jugador;
-    }
-    
+//    public void setJugador(JugadorDTO jugador) {
+//        this.jugador = jugador;
+//    }
+//    
     
     
 }

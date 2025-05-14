@@ -6,6 +6,7 @@ package cliente;
 
 import mensajes.Mensajes;
 import mensajes.ResCrearPartida;
+import mensajes.ResRegistrarJugador;
 import mensajes.ResUnirse;
 import mvpJuego.ModeloJuego;
 import mvpMenu.ModeloMenu;
@@ -33,6 +34,11 @@ public class ManejadorRespuesta {
         if (mensaje instanceof ResUnirse) {
             ResUnirse res = (ResUnirse) mensaje;
             modeloMenu.notificar(res);
+        }
+        if(mensaje instanceof ResRegistrarJugador){
+            ResRegistrarJugador res = (ResRegistrarJugador) mensaje;
+            modeloMenu.notificar(mensaje);
+            
         }
     }
    

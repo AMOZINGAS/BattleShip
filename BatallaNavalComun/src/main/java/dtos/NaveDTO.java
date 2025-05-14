@@ -16,14 +16,22 @@ public abstract class NaveDTO extends JLabel{
     private int tamanio;
     private OrientacionENUM orientacion;
     private List<CasillaDTO> casillas;
+    private CoordenadasDTO coordenadaInicial;
     private EstadoNaveENUM estado;
+    private String nombre;
     
-    public NaveDTO(int tamanio, String tipo, int orientacion){
-        super(tipo, orientacion);
+    public NaveDTO(int tamanio, String nombre, int orientacion){
+        super(nombre, orientacion);
+        this.nombre = nombre;
         this.tamanio = tamanio;
         this.casillas = new ArrayList<>();
         this.estado = EstadoNaveENUM.SIN_DANOS;
         this.orientacion = OrientacionENUM.VERTICAL;
+    }
+    
+    public NaveDTO(CoordenadasDTO coordenadaInicial){
+        this.coordenadaInicial = coordenadaInicial;
+        
     }
     
     /**
@@ -34,6 +42,24 @@ public abstract class NaveDTO extends JLabel{
     
     public boolean estaHundida(){
         return estado == EstadoNaveENUM.HUNDIDA;
+    }
+
+    public CoordenadasDTO getCoordenadaInicial() {
+        return coordenadaInicial;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
+
+    public void setCoordenadaInicial(CoordenadasDTO coordenadaInicial) {
+        this.coordenadaInicial = coordenadaInicial;
     }
 
     public int getTamanio() {
@@ -67,4 +93,11 @@ public abstract class NaveDTO extends JLabel{
     public void setEstado(EstadoNaveENUM estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "NaveDTO{" + "coordenadaInicial=" + coordenadaInicial + '}';
+    }
+    
+    
 }

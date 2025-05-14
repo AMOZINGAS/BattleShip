@@ -4,16 +4,27 @@
  */
 package com.mycompany.serversocket;
 
+import dtos.JugadorDTO;
+import entity.Barco;
+import entity.Casilla;
+import entity.Color;
+import entity.INaveFactory;
 import entity.Juego;
+import entity.Jugador;
+import entity.NaveFactory;
 import entity.SinConfiguracion;
 import entity.StateJuego;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import entity.Nave;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 import mensajes.Mensajes;
+import mensajes.ReqRegistrarJugador;
 import mensajes.ResCrearPartida;
 
 /**
@@ -44,6 +55,31 @@ public class Controlador implements Observer {
         return instance;
     }
 
+    public void registrarJugador(Mensajes mensaje, ManejadorCliente aThis){
+        
+        ReqRegistrarJugador req = (ReqRegistrarJugador) mensaje;
+        JugadorDTO jugadorClient = req.getJugador();
+        INaveFactory factory = new NaveFactory();
+        List<Nave> flotilla = new ArrayList<>();
+        
+        flotilla.add(factory.crearBarco());
+        flotilla.add(factory.crearBarco());
+        flotilla.add(factory.crearBarco());
+        flotilla.add(factory.crearSubmarino());
+        flotilla.add(factory.crearSubmarino());
+        flotilla.add(factory.crearSubmarino());
+        flotilla.add(factory.crearSubmarino());
+        flotilla.add(factory.crearCrucero());
+        flotilla.add(factory.crearCrucero());
+        flotilla.add(factory.crearPortaAviones());
+        flotilla.add(factory.crearPortaAviones());
+        Jugador jugador = new Jugador(jugadorClient.getNombre(), Color.ROJO);
+        jugador.setFlotilla(flotilla);
+        juego.addJugador(jugador);
+        
+        
+    }
+    
     public void unirse(Mensajes mensaje, ManejadorCliente aThis) {
         this.clientHandler = aThis;
         modelo.unirsePartida(juego, mensaje);

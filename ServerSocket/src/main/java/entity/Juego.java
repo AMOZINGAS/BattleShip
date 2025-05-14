@@ -81,6 +81,7 @@ public class Juego extends Observable{
         if (this.getEstado() instanceof EnEsperaEstado) {
             setChanged();
             ResUnirse res = new ResUnirse("JUGADOR_UNIDO");
+//            this.addJugador(new Jugador("", Color.ROJO));
             notifyObservers(res);
         } else {
             setChanged();
@@ -101,9 +102,13 @@ public class Juego extends Observable{
         
     }
     
-    public void setJugador1(Jugador jugador1) {
-        this.jugadores.set(0, jugador1);
-    } 
+    public void addJugador(Jugador jugador){
+        jugadores.add(jugador);
+    }
+    
+//    public void setJugador1(Jugador jugador1) {
+//        this.jugadores.set(0, jugador1);
+//    } 
         
     public Jugador getJugador2() {
         return jugadores.get(1);

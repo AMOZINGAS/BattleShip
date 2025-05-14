@@ -7,28 +7,38 @@ package mvpMenu;
 import dtos.BarcoDTO;
 import dtos.CasillaDTO;
 import dtos.CoordenadasDTO;
+import dtos.CruceroDTO;
+import dtos.JugadorDTO;
 import dtos.MatrizDTO;
 import dtos.NaveDTO;
 import dtos.OrientacionENUM;
+import dtos.PortaAvionesDTO;
+import dtos.SubmarinoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import static javax.swing.JList.VERTICAL;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import mensajes.Mensajes;
 import mvpJuego.PresentadorJuego;
 
@@ -44,12 +54,74 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
     
     private PresentadorMenu presentador;
     private MatrizDTO matriz;
+    private JugadorDTO jugador = new JugadorDTO(); 
+    private Color color = Color.RED;
     
     public VistaConfiguracion(PresentadorMenu presentador) {
         this.presentador = presentador;
-        this.matriz = new MatrizDTO();
+        this.matriz = new MatrizDTO(jugador);//Agregar jugadorDTO
         this.presentador = presentador;
+        
         initComponents();
+        //Prueba Nave con DTOs
+        NaveDTO barco1 = new BarcoDTO(1, "Barco 01", VERTICAL);
+        barco1.setBounds(b1.getBounds());
+        hacerArrastrable(barco1); // las hacemos que se puedan arrastrar con el raton 
+        this.add(barco1);
+        
+        NaveDTO barco2 = new BarcoDTO(1, "Barco 02", VERTICAL);
+        barco2.setBounds(b2.getBounds());
+        hacerArrastrable(barco2); // las hacemos que se puedan arrastrar con el raton 
+        this.add(barco2);
+        
+        NaveDTO barco3 = new BarcoDTO(1, "Barco 03", VERTICAL);
+        barco3.setBounds(b3.getBounds());
+        hacerArrastrable(barco3); // las hacemos que se puedan arrastrar con el raton 
+        this.add(barco3);
+        
+        NaveDTO crucero1 = new CruceroDTO(3, "Crucero 01", VERTICAL);
+        crucero1.setBounds(c1.getBounds());
+        hacerArrastrable(crucero1); // las hacemos que se puedan arrastrar con el raton 
+        this.add(crucero1);
+        
+        NaveDTO crucero2 = new CruceroDTO(3, "Crucero 02", VERTICAL);
+        crucero2.setBounds(c2.getBounds());
+        hacerArrastrable(crucero2); // las hacemos que se puedan arrastrar con el raton 
+        this.add(crucero2);
+        
+        NaveDTO portaAviones1 = new PortaAvionesDTO(4, "Porta Aviones 01", VERTICAL);
+        portaAviones1.setBounds(p1.getBounds());
+        hacerArrastrable(portaAviones1); // las hacemos que se puedan arrastrar con el raton 
+        this.add(portaAviones1);
+        
+        NaveDTO portaAviones2 = new PortaAvionesDTO(4, "Porta Aviones 02", VERTICAL);
+        portaAviones2.setBounds(p2.getBounds());
+        hacerArrastrable(portaAviones2); // las hacemos que se puedan arrastrar con el raton 
+        this.add(portaAviones2);
+        
+        NaveDTO subMarino1 = new SubmarinoDTO(2, "Submarino 01", VERTICAL);
+        subMarino1.setBounds(s1.getBounds());
+        hacerArrastrable(subMarino1); // las hacemos que se puedan arrastrar con el raton 
+        this.add(subMarino1);
+        
+        NaveDTO subMarino2 = new SubmarinoDTO(2, "Submarino 02", VERTICAL);
+        subMarino2.setBounds(s2.getBounds());
+        hacerArrastrable(subMarino2); // las hacemos que se puedan arrastrar con el raton 
+        this.add(subMarino2);
+        
+        NaveDTO subMarino3 = new SubmarinoDTO(2, "Submarino 03", VERTICAL);
+        subMarino3.setBounds(s3.getBounds());
+        hacerArrastrable(subMarino3); // las hacemos que se puedan arrastrar con el raton 
+        this.add(subMarino3);
+        
+        NaveDTO subMarino4 = new SubmarinoDTO(2, "Submarino 04", VERTICAL);
+        subMarino4.setBounds(s4.getBounds());
+        hacerArrastrable(subMarino4); // las hacemos que se puedan arrastrar con el raton 
+        this.add(subMarino4);
+        
+//        jugador.addNave(crucero);
+//        jugador.addNave(barco1);
+        
         iniciarTablero(); // creamos el tablero
         this.add(TableroJP, BorderLayout.CENTER); // añadimos el tablero al frame
         
@@ -57,15 +129,12 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         int altoVentana = 10 * 40 + 70;
         TableroJP.setSize(anchoVentana, altoVentana);
          
-        //Prueba Nave con DTOs
-        NaveDTO barco1 = new BarcoDTO(1, "Barco", VERTICAL);
-        barco1.setBounds(10, 10, 60, 20);
-        hacerArrastrable(barco1); // las hacemos que se puedan arrastrar con el raton 
-        this.add(barco1);
+        
+        
         
         
     }
-
+    
     public void iniciarTablero(){
         
         TableroJP.setLayout(new GridLayout(10, 10));
@@ -82,14 +151,166 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                 int c = col;
 
                 casilla.addMouseListener(new MouseAdapter() {
+                    Timer timer;
+
                     @Override
-                    public void mouseClicked(MouseEvent e) { System.out.println("Clic en Fila: " + f + ", Columna: " + c);}});
-                    TableroJP.add(casilla);
-                    matriz.addCasilla(casilla); 
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getClickCount() == 1) {
+                            NaveDTO nave = casilla.getNaveOcupante();
+                            if (nave != null) {
+                                rotarNave(nave);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        timer = new Timer(600, evt -> {
+                            NaveDTO nave = casilla.getNaveOcupante();
+                            if (nave != null) {
+                                devolverNave(nave);
+                            }
+                        });
+                        timer.setRepeats(false);
+                        timer.start();
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        if (timer != null && timer.isRunning()) {
+                            timer.stop();
+                        }
+                    }
+                });
+                TableroJP.add(casilla);
+                matriz.addCasilla(casilla); 
             }
         }
         
     }
+    
+    private void rotarNave(NaveDTO nave) {
+        OrientacionENUM nuevaOrientacion = (nave.getOrientacion() == OrientacionENUM.HORIZONTAL)
+            ? OrientacionENUM.VERTICAL : OrientacionENUM.HORIZONTAL;
+
+        CasillaDTO origen = nave.getCasillas().get(0);
+        int fila = origen.getCoordenada().getCoordenadasX();
+        int col = origen.getCoordenada().getCoordenadasY();
+
+        int dx = (nuevaOrientacion == OrientacionENUM.VERTICAL) ? 1 : 0;
+        int dy = (nuevaOrientacion == OrientacionENUM.HORIZONTAL) ? 1 : 0;
+
+        List<CasillaDTO> nuevasCasillas = new ArrayList<>();
+        boolean valido = true;
+
+        for (int i = 0; i < nave.getTamanio(); i++) {
+            int f = fila + i * dx;
+            int c = col + i * dy;
+
+            if (f >= 10 || c >= 10) {
+                valido = false;
+                break;
+            }
+
+            CasillaDTO celda = (CasillaDTO) TableroJP.getComponent(f * 10 + c);
+            if (celda.getNaveOcupante() != null && celda.getNaveOcupante() != nave) {
+                valido = false;
+                break;
+            }
+
+            nuevasCasillas.add(celda);
+        }
+
+        if (!valido) {
+            JOptionPane.showMessageDialog(null, "No se puede rotar: colisión o fuera del tablero.");
+            return;
+        }
+
+        // Limpiar casillas anteriores
+        for (CasillaDTO c : nave.getCasillas()) {
+            c.setBackground(Color.WHITE);
+            c.setNaveOcupante(null);
+        }
+
+        // Asignar nuevas casillas
+        for (CasillaDTO c : nuevasCasillas) {
+            c.setBackground(color);
+            c.setNaveOcupante(nave);
+        }
+
+        nave.setCasillas(nuevasCasillas);
+        nave.setOrientacion(nuevaOrientacion);
+    }
+    
+    private void devolverNave(NaveDTO nave) {
+        for (CasillaDTO c : nave.getCasillas()) {
+            c.setBackground(Color.WHITE);
+            c.setNaveOcupante(null);
+        }
+        matriz.getNaves().remove(nave);
+        nave.setCasillas(new ArrayList<>());
+        
+        switch (nave.getNombre()){
+            case "Barco 01":
+                nave.setBounds(b1.getBounds());
+                break;
+            case "Barco 02":
+                nave.setBounds(b2.getBounds());
+                break;
+            case "Barco 03":
+                nave.setBounds(b3.getBounds());
+                break;
+            case "Crucero 01":
+                nave.setBounds(c1.getBounds());
+                break;
+            case "Crucero 02":
+                nave.setBounds(c2.getBounds());
+                break;
+            case "Porta Aviones 01":
+                nave.setBounds(p1.getBounds());
+                break;
+            case "Porta Aviones 02":
+                nave.setBounds(p2.getBounds());
+                break;
+            case "Submarino 01":
+                System.out.println("Submarino 1");
+                nave.setBounds(s1.getBounds());
+                break;
+            case "Submarino 02":
+                System.out.println("Submarino 2");
+                nave.setBounds(s2.getBounds());
+                break;
+            case "Submarino 03":
+                System.out.println("Submarino 3");
+                nave.setBounds(s3.getBounds());
+                break;
+            case "Submarino 04":
+                System.out.println("Submarino 4");
+                nave.setBounds(s4.getBounds());
+                break;
+            default:
+                System.out.println("3");
+            
+        }
+        nave.setVisible(true);
+        removerNaveJugador(nave.getCoordenadaInicial(), nave);
+        this.add(nave);
+        this.repaint();
+    }
+
+    public void removerNaveJugador(CoordenadasDTO coordenada, NaveDTO naveRemove){
+        
+        System.out.println(jugador.getFlotilla());
+        jugador.removeNave(naveRemove);
+        System.out.println(jugador.getFlotilla());
+//        for(NaveDTO naveJugador: jugador.getFlotilla()){
+//            if(naveRemove.getCoordenadaInicial() == naveJugador.getCoordenadaInicial()){
+//                
+//            }
+//        }
+        
+    }
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,6 +327,20 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        b1 = new javax.swing.JLabel();
+        b3 = new javax.swing.JLabel();
+        s3 = new javax.swing.JLabel();
+        s4 = new javax.swing.JLabel();
+        c2 = new javax.swing.JLabel();
+        p2 = new javax.swing.JLabel();
+        b2 = new javax.swing.JLabel();
+        s1 = new javax.swing.JLabel();
+        s2 = new javax.swing.JLabel();
+        c1 = new javax.swing.JLabel();
+        p1 = new javax.swing.JLabel();
+        btnColor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,49 +382,128 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
             }
         });
 
+        jLabel1.setText("Nombre");
+
+        b1.setFocusable(false);
+
+        b3.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnColor.setText("Color");
+        btnColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnColorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(58, 58, 58)
+                .addGap(108, 108, 108)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnColor)
+                .addGap(223, 223, 223))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(61, 61, 61))
+                        .addGap(18, 18, 18)
+                        .addComponent(b1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(43, 43, 43)
-                        .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(205, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(b3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(c1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(c2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(s1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(s2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(s4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(s3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(p1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(p2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(88, 88, 88)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(37, 37, 37)
+                        .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(551, 551, 551)
+                        .addComponent(jButton1)))
+                .addGap(0, 61, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(b1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(3, 3, 3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(b3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(c1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(c2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(s1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(s2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(s4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(s3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(p1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(p2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(121, 121, 121)
                         .addComponent(jButton3)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton5)))
+                        .addComponent(jButton5))
+                    .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addGap(132, 132, 132))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(570, 570, 570)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(btnColor)))
+                .addGap(63, 63, 63)
+                .addComponent(jLabel1)
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton1))))
         );
 
         pack();
@@ -215,15 +529,37 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
+        // TODO add your handling code here:
+        
+        color = JColorChooser.showDialog(null, "Color", Color.black);
+        pintar();
+        
+    }//GEN-LAST:event_btnColorActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel TableroJP;
+    private javax.swing.JLabel b1;
+    private javax.swing.JLabel b2;
+    private javax.swing.JLabel b3;
+    private javax.swing.JButton btnColor;
+    private javax.swing.JLabel c1;
+    private javax.swing.JLabel c2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel p1;
+    private javax.swing.JLabel p2;
+    private javax.swing.JLabel s1;
+    private javax.swing.JLabel s2;
+    private javax.swing.JLabel s3;
+    private javax.swing.JLabel s4;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -237,31 +573,6 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                 this.setVisible(true);
             }
         }
-    }
-    
-    public class ColocacionNavesV2 extends javax.swing.JFrame {
-    
-    private static int TAM;
-    private static int filas;
-    private static int columnas;
-    
-
-//    public ColocacionNavesV2() {
-//        // para las naves
-//        Nave1 = new BarcoDTO(1, "Barco 1", VERTICAL);
-////        Nave2 = new Nave(SUBMARINO, HORIZONTAL, "Nave 2");
-////        Nave3 = new Nave(PORTAVIONES, VERTICAL, "Nave 3");
-////        Nave4 = new Nave(CRUCERO, HORIZONTAL, "Nave 4");
-//        Nave1.setBounds(10, 10, 60, 20);
-////        Nave2.setBounds(100, 10, 60, 20);
-////        Nave3.setBounds(190, 10, 60, 20);
-////        Nave4.setBounds(280, 10, 60, 20);
-//        hacerArrastrable(Nave1); // las hacemos que se puedan arrastrar con el raton 
-////        hacerArrastrable(Nave2);
-////        hacerArrastrable(Nave3);
-////        hacerArrastrable(Nave4);
-//
-//        add(tablero, BorderLayout.CENTER); // añadimos el tablero al frame
     }
 
     // metodo para hacer que los JLabels de las naves se puedan arrastrar
@@ -290,6 +601,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
             @Override
             public void mousePressed(MouseEvent e) {
                 puntoInicial.setLocation(e.getPoint());
+                
             }
             
             @Override
@@ -338,23 +650,61 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                     // Si es válido, pintar y asignar nave
                     if (valido) {
                         for (CasillaDTO c : casillasOcupadas) {
-                            c.setBackground(Color.BLACK);
+                            c.setBackground(color);
                             c.setNaveOcupante(nave);
                         }
                         nave.setCasillas(casillasOcupadas);
-                        matriz.getNaves().add(nave); // 👈guarda la nave colocada en la lista del tablero
-
-
-                        // Opcional: mover JLabel de la nave fuera del panel de selección
-//                        label.setVisible(false); // o remove(label) si no lo necesitas más
+                        nave.setCoordenadaInicial(casillaInicial.getCoordenada());
+                        matriz.getNaves().add(nave); // guarda la nave colocada en la lista del tablero
+                        jugador.addNave(nave);
+                        label.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "Colocación inválida: hay colisión o está fuera del tablero.");
                     }
                 }
+                
             }
 
         });
+    }    
+    
+    public void pintar(){
+        if(jugador.getFlotilla()!=null){
+            for(NaveDTO nave: jugador.getFlotilla()){
+                for(CasillaDTO casilla: nave.getCasillas()){
+                    casilla.setBackground(color);
+                }
+            }
+            
+        }
+        
     }
+    
+//    public class ColocacionNavesV2 extends javax.swing.JFrame {
+//    
+//    private static int TAM;
+//    private static int filas;
+//    private static int columnas;
+//    
+//
+////    public ColocacionNavesV2() {
+////        // para las naves
+////        Nave1 = new BarcoDTO(1, "Barco 1", VERTICAL);
+//////        Nave2 = new Nave(SUBMARINO, HORIZONTAL, "Nave 2");
+//////        Nave3 = new Nave(PORTAVIONES, VERTICAL, "Nave 3");
+//////        Nave4 = new Nave(CRUCERO, HORIZONTAL, "Nave 4");
+////        Nave1.setBounds(10, 10, 60, 20);
+//////        Nave2.setBounds(100, 10, 60, 20);
+//////        Nave3.setBounds(190, 10, 60, 20);
+//////        Nave4.setBounds(280, 10, 60, 20);
+////        hacerArrastrable(Nave1); // las hacemos que se puedan arrastrar con el raton 
+//////        hacerArrastrable(Nave2);
+//////        hacerArrastrable(Nave3);
+//////        hacerArrastrable(Nave4);
+////
+////        add(tablero, BorderLayout.CENTER); // añadimos el tablero al frame
+//    }
+
     
 //    public TableroDTO clonarTablero() {
 //        TableroDTO tableroClon = new TableroDTO();

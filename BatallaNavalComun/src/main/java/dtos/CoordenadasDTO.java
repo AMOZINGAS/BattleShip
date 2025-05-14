@@ -43,5 +43,12 @@ public class CoordenadasDTO {
         return this.y;
         
     }
+
+    @Override
+    public String toString() {
+        return "CoordenadasDTO" + "\nx: " + x + "\ny=" + y;
+    }
+    
+    
     
 }

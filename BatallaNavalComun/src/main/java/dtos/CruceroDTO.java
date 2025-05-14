@@ -8,6 +8,13 @@ package dtos;
  *
  * @author CISCO
  */
-public class CruceroDTO {
+public class CruceroDTO extends NaveDTO{
+    
+    public CruceroDTO(int tamanio, String tipo, int orientacion) {
+        super(tamanio, tipo, orientacion);
+    }
+    public String getTipo() {
+        return "Crucero";
+    }
     
 }
