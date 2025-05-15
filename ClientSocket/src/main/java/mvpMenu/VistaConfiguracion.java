@@ -41,6 +41,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import mensajes.Mensajes;
 import mvpJuego.PresentadorJuego;
+import mvp_strange.FrmSalaDeEspera;
 
 /**
  *
@@ -53,6 +54,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
      */
     
     private PresentadorMenu presentador;
+    private List<NaveDTO> naves = new ArrayList<>();
     private MatrizDTO matriz;
     private JugadorDTO jugador = new JugadorDTO(); 
     private Color color = Color.RED;
@@ -68,56 +70,67 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         barco1.setBounds(b1.getBounds());
         hacerArrastrable(barco1); // las hacemos que se puedan arrastrar con el raton 
         this.add(barco1);
+        naves.add(barco1);
         
         NaveDTO barco2 = new BarcoDTO(1, "Barco 02", VERTICAL);
         barco2.setBounds(b2.getBounds());
         hacerArrastrable(barco2); // las hacemos que se puedan arrastrar con el raton 
         this.add(barco2);
+        naves.add(barco2);
         
         NaveDTO barco3 = new BarcoDTO(1, "Barco 03", VERTICAL);
         barco3.setBounds(b3.getBounds());
         hacerArrastrable(barco3); // las hacemos que se puedan arrastrar con el raton 
         this.add(barco3);
+        naves.add(barco3);
         
         NaveDTO crucero1 = new CruceroDTO(3, "Crucero 01", VERTICAL);
         crucero1.setBounds(c1.getBounds());
         hacerArrastrable(crucero1); // las hacemos que se puedan arrastrar con el raton 
         this.add(crucero1);
+        naves.add(crucero1);
         
         NaveDTO crucero2 = new CruceroDTO(3, "Crucero 02", VERTICAL);
         crucero2.setBounds(c2.getBounds());
         hacerArrastrable(crucero2); // las hacemos que se puedan arrastrar con el raton 
         this.add(crucero2);
+        naves.add(crucero2);
         
         NaveDTO portaAviones1 = new PortaAvionesDTO(4, "Porta Aviones 01", VERTICAL);
         portaAviones1.setBounds(p1.getBounds());
         hacerArrastrable(portaAviones1); // las hacemos que se puedan arrastrar con el raton 
         this.add(portaAviones1);
+        naves.add(portaAviones1);
         
         NaveDTO portaAviones2 = new PortaAvionesDTO(4, "Porta Aviones 02", VERTICAL);
         portaAviones2.setBounds(p2.getBounds());
         hacerArrastrable(portaAviones2); // las hacemos que se puedan arrastrar con el raton 
         this.add(portaAviones2);
+        naves.add(portaAviones2);
         
         NaveDTO subMarino1 = new SubmarinoDTO(2, "Submarino 01", VERTICAL);
         subMarino1.setBounds(s1.getBounds());
         hacerArrastrable(subMarino1); // las hacemos que se puedan arrastrar con el raton 
         this.add(subMarino1);
+        naves.add(subMarino1);
         
         NaveDTO subMarino2 = new SubmarinoDTO(2, "Submarino 02", VERTICAL);
         subMarino2.setBounds(s2.getBounds());
         hacerArrastrable(subMarino2); // las hacemos que se puedan arrastrar con el raton 
         this.add(subMarino2);
+        naves.add(subMarino2);
         
         NaveDTO subMarino3 = new SubmarinoDTO(2, "Submarino 03", VERTICAL);
         subMarino3.setBounds(s3.getBounds());
         hacerArrastrable(subMarino3); // las hacemos que se puedan arrastrar con el raton 
         this.add(subMarino3);
+        naves.add(subMarino3);
         
         NaveDTO subMarino4 = new SubmarinoDTO(2, "Submarino 04", VERTICAL);
         subMarino4.setBounds(s4.getBounds());
         hacerArrastrable(subMarino4); // las hacemos que se puedan arrastrar con el raton 
         this.add(subMarino4);
+        naves.add(subMarino4);
         
 //        jugador.addNave(crucero);
 //        jugador.addNave(barco1);
@@ -128,11 +141,6 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         int anchoVentana = 10 * 40 + 50;
         int altoVentana = 10 * 40 + 70;
         TableroJP.setSize(anchoVentana, altoVentana);
-         
-        
-        
-        
-        
     }
     
     public void iniciarTablero(){
@@ -322,11 +330,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
     private void initComponents() {
 
         TableroJP = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnListo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         b1 = new javax.swing.JLabel();
@@ -343,42 +347,15 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         btnColor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Configuración de Naves");
 
         TableroJP.setBackground(new java.awt.Color(204, 204, 255));
         TableroJP.setLayout(new java.awt.BorderLayout());
 
-        jButton1.setText("Ready");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnListo.setText("Listo");
+        btnListo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Barco");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Submarino");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Porta Aviones");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton5.setText("Porta Aviones");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnListoActionPerformed(evt);
             }
         });
 
@@ -400,21 +377,18 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnColor)
-                .addGap(223, 223, 223))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(b1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)
-                        .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addContainerGap()
+                        .addComponent(btnListo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(b1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(b3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)
@@ -431,44 +405,30 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                                 .addComponent(s3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)
                                 .addComponent(p1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(p2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(88, 88, 88)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(37, 37, 37)
-                        .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(551, 551, 551)
-                        .addComponent(jButton1)))
-                .addGap(0, 61, Short.MAX_VALUE))
+                                .addGap(56, 56, 56)
+                                .addComponent(p2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnColor))
+                        .addGap(41, 41, 41)
+                        .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(b1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(3, 3, 3)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(b1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(b3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(c1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(c2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(s1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -482,52 +442,48 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                             .addComponent(p1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addComponent(p2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(121, 121, 121)
-                        .addComponent(jButton3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5))
-                    .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(btnColor)))
-                .addGap(63, 63, 63)
-                .addComponent(jLabel1)
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton1))))
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(btnColor))
+                    .addComponent(TableroJP, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addComponent(btnListo)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        if(txtNombre.getText() == null || txtNombre.getText().length() == 0){
+            JOptionPane.showMessageDialog(this, "Elija un nombre para seguir. ", "Nombre incompleto", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(txtNombre.getText().length() < 5){
+            JOptionPane.showMessageDialog(this, "El nombre debe ser mayor a 4 caracteres. ", "Nombre inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        boolean todasNavesColocadas = true;
+        for (NaveDTO nave : naves) {
+            if(nave.isVisible()){
+                todasNavesColocadas = false;
+            }
+        }
+        
+        if(!todasNavesColocadas){
+            JOptionPane.showMessageDialog(this, "Coloca todas las naves para continuar. ", "Configuración incompleta", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        FrmSalaDeEspera frm = new FrmSalaDeEspera();
+        frm.setVisible(true);
+    }//GEN-LAST:event_btnListoActionPerformed
 
     private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
         // TODO add your handling code here:
@@ -545,13 +501,9 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
     private javax.swing.JLabel b2;
     private javax.swing.JLabel b3;
     private javax.swing.JButton btnColor;
+    private javax.swing.JButton btnListo;
     private javax.swing.JLabel c1;
     private javax.swing.JLabel c2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel p1;
     private javax.swing.JLabel p2;
