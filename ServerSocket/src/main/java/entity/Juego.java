@@ -11,7 +11,10 @@ import java.util.List;
 import mensajes.ResUnirse;
 import entity.EnEsperaEstado;
 import java.util.Observable;
+import java.util.Random;
 import mensajes.ResCrearPartida;
+import mensajes.ResJuegoIniciado;
+import mensajes.ResTurno;
 
 /**
  *
@@ -100,6 +103,30 @@ public class Juego extends Observable{
             notifyObservers(new ResCrearPartida("PARTIDA_NO_CREADA"));
         }
         
+    }
+    
+    public synchronized void iniciarPartida(){
+        if (this.estado instanceof EnEsperaEstado && jugadores.size() == 2) {
+            this.estado = new EnCursoEstado();
+            this.jugadorEnTurno = determinarJugadorInicial();
+            setChanged();
+            notifyObservers(new ResJuegoIniciado("JUEGO_INICIADO"));
+            setChanged();
+            notifyObservers(new ResTurno(jugadorEnTurno.getNombre()));
+            System.out.println("Juego: Partida iniciada. Turno de " + jugadorEnTurno.getNombre());
+        } else {
+            System.out.println("Juego: No se puede iniciar la partida. Estado: " + this.estado + ", Jugadores: " + jugadores.size());
+            //Notificar observadores?
+        }
+    }
+    
+    public synchronized Jugador determinarJugadorInicial() {
+        if (!jugadores.isEmpty()) {
+            Random random = new Random();
+            jugadorEnTurno = jugadores.get(random.nextInt(jugadores.size()));
+            return jugadorEnTurno;
+        }
+        return null;
     }
     
     public void addJugador(Jugador jugador){

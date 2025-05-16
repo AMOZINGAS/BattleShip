@@ -4,6 +4,7 @@
  */
 package dtos;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +17,11 @@ public class JugadorDTO {
     private String nombre;
     private List<NaveDTO> flotilla = new ArrayList<>();
     private List<DisparoDTO> disparos = new ArrayList<>();
-    private ColorDTO color;
+    private Color color;
 //    private Tablero tableroPropio;
 //    private Tablero tableroDisparos;
 
-    public JugadorDTO(String nombre, ColorDTO color) {
+    public JugadorDTO(String nombre, Color color) {
         this.nombre = nombre;
         this.color = color;
 //        this.tableroPropio = new Tablero(this);
@@ -62,11 +63,11 @@ public class JugadorDTO {
         this.disparos = disparos;
     }
 
-    public ColorDTO getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(ColorDTO color) {
+    public void setColor(Color color) {
         this.color = color;
     }
     

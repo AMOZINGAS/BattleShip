@@ -9,15 +9,12 @@ package entity;
  * @author Amos Heli Olguin Quiroz
  */
 public class SinConfiguracion implements StateJuego{
-
     private static Juego juego;
     
     @Override
     public void manejarEstado(Juego juego) {
-        
         this.juego = juego;
         juego.setEstado(new EnEsperaEstado());
         
     }
-    
 }

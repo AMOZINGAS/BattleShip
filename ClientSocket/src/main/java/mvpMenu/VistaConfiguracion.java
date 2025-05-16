@@ -10,6 +10,7 @@ import dtos.CoordenadasDTO;
 import dtos.CruceroDTO;
 import dtos.JugadorDTO;
 import dtos.MatrizDTO;
+import dtos.NaveConfigDTO;
 import dtos.NaveDTO;
 import dtos.OrientacionENUM;
 import dtos.PortaAvionesDTO;
@@ -25,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +41,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import mensajes.ManejadorMensajes;
 import mensajes.Mensajes;
+import mensajes.ReqRegistrarJugadorConfig;
 import mvpJuego.PresentadorJuego;
 import mvp_strange.FrmSalaDeEspera;
 
@@ -460,15 +464,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
 
     private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         // TODO add your handling code here:
-        if(txtNombre.getText() == null || txtNombre.getText().length() == 0){
-            JOptionPane.showMessageDialog(this, "Elija un nombre para seguir. ", "Nombre incompleto", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if(txtNombre.getText().length() < 5){
-            JOptionPane.showMessageDialog(this, "El nombre debe ser mayor a 4 caracteres. ", "Nombre inválido", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
+        //Validación de naves
         boolean todasNavesColocadas = true;
         for (NaveDTO nave : naves) {
             if(nave.isVisible()){
@@ -480,6 +476,53 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
             JOptionPane.showMessageDialog(this, "Coloca todas las naves para continuar. ", "Configuración incompleta", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        //Validación del nombre
+        if(txtNombre.getText() == null || txtNombre.getText().length() == 0){
+            JOptionPane.showMessageDialog(this, "Elija un nombre para seguir. ", "Nombre incompleto", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(txtNombre.getText().length() < 5){
+            JOptionPane.showMessageDialog(this, "El nombre debe ser mayor a 4 caracteres. ", "Nombre inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        //Petición al servidor
+        // 1. Recopilar la información del tablero
+        List<NaveConfigDTO> configuracionNaves = new ArrayList<>();
+        for (NaveDTO nave : naves) {
+            // Asumo que NaveDTO tiene métodos para obtener posición y orientación
+            CoordenadasDTO coordenada = nave.getCoordenadaInicial();
+            OrientacionENUM orientacion = nave.getOrientacion();
+            String tipoNave = nave.getTipo(); // Necesitas definir un tipo en NaveDTO
+
+            if (coordenada != null) {
+                configuracionNaves.add(new NaveConfigDTO(tipoNave, coordenada, orientacion));
+            } else {
+                // Esto no debería ocurrir si la validación de colocación es correcta
+                System.err.println("Error: Nave sin coordenada inicial.");
+                return;
+            }
+        }
+        
+        //2. Creamos un mensaje para el servidor (en JSON)
+        ReqRegistrarJugadorConfig peticionRegistro = new ReqRegistrarJugadorConfig(new JugadorDTO(txtNombre.getText(), color), configuracionNaves);
+        String jsonPeticion = ManejadorMensajes.toJson(peticionRegistro);
+
+        //3. Enviamos el mensaje al servidor
+        if (out != null && !out.checkError()) {
+            out.println(jsonPeticion);
+            out.flush(); //Para envío inmediato
+            System.out.println("Cliente: Enviando configuración al servidor: " + jsonPeticion);
+
+            //4. Cambiamos a la siguiente pantalla (Sala de Espera)
+            FrmSalaDeEspera frm = new FrmSalaDeEspera();
+            frm.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo enviar la configuración al servidor. ", "Error de conexión", JOptionPane.ERROR_MESSAGE);
+        }
+        
         
         FrmSalaDeEspera frm = new FrmSalaDeEspera();
         frm.setVisible(true);
@@ -627,9 +670,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                     casilla.setBackground(color);
                 }
             }
-            
         }
-        
     }
     
 //    public class ColocacionNavesV2 extends javax.swing.JFrame {

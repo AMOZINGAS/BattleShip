@@ -8,6 +8,7 @@ import dtos.JugadorDTO;
 import entity.Barco;
 import entity.Casilla;
 import entity.Color;
+import entity.EnCursoEstado;
 import entity.INaveFactory;
 import entity.Juego;
 import entity.Jugador;
@@ -23,9 +24,13 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import mensajes.Mensajes;
-import mensajes.ReqRegistrarJugador;
+import mensajes.ReqRegistrarJugadorConfig;
 import mensajes.ResCrearPartida;
+import mensajes.ResEspera;
+import mensajes.ResJuegoIniciado;
+import mensajes.ResTurno;
 
 /**
  *
@@ -38,6 +43,7 @@ public class Controlador implements Observer {
     ModeloServer modelo = new ModeloServer();
     Server server = Server.getInstance();
     Juego juego = Juego.getInstance();
+    private Map<Jugador, Boolean> jugadoresListos = new ConcurrentHashMap<>();
     private Queue<String> accionesPendientes = new LinkedList<>();
 
     private Controlador() {
@@ -55,30 +61,22 @@ public class Controlador implements Observer {
         return instance;
     }
 
-    public void registrarJugador(Mensajes mensaje, ManejadorCliente aThis){
+    public void jugadorListoParaJugar(Jugador jugador, ManejadorCliente aThis){
+        System.out.println("Controlador: Jugador " + jugador.getNombre() + " está listo.");
+        jugadoresListos.put(jugador, true);
         
-        ReqRegistrarJugador req = (ReqRegistrarJugador) mensaje;
-        JugadorDTO jugadorClient = req.getJugador();
-        INaveFactory factory = new NaveFactory();
-        List<Nave> flotilla = new ArrayList<>();
-        
-        flotilla.add(factory.crearBarco());
-        flotilla.add(factory.crearBarco());
-        flotilla.add(factory.crearBarco());
-        flotilla.add(factory.crearSubmarino());
-        flotilla.add(factory.crearSubmarino());
-        flotilla.add(factory.crearSubmarino());
-        flotilla.add(factory.crearSubmarino());
-        flotilla.add(factory.crearCrucero());
-        flotilla.add(factory.crearCrucero());
-        flotilla.add(factory.crearPortaAviones());
-        flotilla.add(factory.crearPortaAviones());
-        Jugador jugador = new Jugador(jugadorClient.getNombre(), Color.ROJO);
-        jugador.setFlotilla(flotilla);
-        juego.addJugador(jugador);
-        
-        
+        if (estanTodosJugadoresListos()) {
+            System.out.println("Controlador: Ambos jugadores están listos. Iniciando el juego.");
+            juego.setEstado(new EnCursoEstado());
+            juego.iniciarPartida();
+            if (juego.getJugadorEnTurno() != null) {
+                clientHandler.sendMessage(new ResTurno(juego.getJugadorEnTurno().getNombre()));
+            }
+        } else {
+            clientHandler.sendMessage(new ResEspera("ESPERANDO_OPONENTE"));
+        }
     }
+    
     
     public void unirse(Mensajes mensaje, ManejadorCliente aThis) {
         this.clientHandler = aThis;
@@ -104,4 +102,22 @@ public class Controlador implements Observer {
 
         }
     }
+    
+    private boolean estanTodosJugadoresListos() {
+        for (boolean listo : jugadoresListos.values()) {
+            if (!listo) {
+                return false; // Si al menos un jugador no está listo, devolvemos false
+            }
+        }
+        return true; // Todos los jugadores están listos
+    }
+    
+//    private ManejadorCliente obtenerManejadorCliente(Jugador jugador) {
+//    for (ManejadorCliente cliente : server.getClientes()) {
+//        if (cliente.getJugador() != null && cliente.getJugador().equals(jugador)) {
+//            return cliente;
+//        }
+//    }
+//    return null;
+//}
 }

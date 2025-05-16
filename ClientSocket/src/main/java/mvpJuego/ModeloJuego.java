@@ -24,7 +24,7 @@ public class ModeloJuego extends Observable{
     
     public void actualizarDisparoEnemigo(){
         
-        
+        //?
         
     }
     

@@ -3,8 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package entity;
-
-import entity.Color;
+import java.awt.Color;
 import entity.Disparo;
 import capaLogica.excepciones.ServerLogicException;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Jugador {
     private List<Nave> flotilla;
     private List<Disparo> disparos;
     private Color color;
-//    private Tablero tableroPropio;
+    private Tablero tableroPropio;
 //    private Tablero tableroDisparos;
 
     public Jugador(String nombre, Color color) {
@@ -27,7 +26,7 @@ public class Jugador {
         this.flotilla = new ArrayList<>();
         this.disparos = new ArrayList<>();
         this.color = color;
-//        this.tableroPropio = new Tablero(this);
+        this.tableroPropio = new Tablero(this);
 //        this.tableroDisparos = new Tablero(null);
     }
 
@@ -67,10 +66,10 @@ public class Jugador {
     public void setColor(Color color) {
         this.color = color;
     }
-
-//    public Tablero getTableroPropio() {
-//        return tableroPropio;
-//    }
+    
+    public Tablero getTableroPropio() {
+        return tableroPropio;
+    }
 //
 //    public Tablero getTableroDisparos() {
 //        return tableroDisparos;

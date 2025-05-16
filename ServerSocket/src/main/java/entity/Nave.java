@@ -26,6 +26,13 @@ public abstract class Nave {
         this.casillas = new ArrayList<>();
         this.estado = EstadoNave.SIN_DAÑOS;
         this.orientacion = Orientacion.VERTICAL;
+    }
+    
+    public Nave(int tamanio, Coordenada coordenadaInicial){
+        this.tamanio = tamanio;
+        this.casillas = new ArrayList<>();
+        this.estado = EstadoNave.SIN_DAÑOS;
+        this.orientacion = Orientacion.VERTICAL;
         this.coordenadaInicial = coordenadaInicial;
     }
     
@@ -79,8 +86,6 @@ public abstract class Nave {
     public void setCoordenadaInicial(Coordenada coordenadaInicial) {
         this.coordenadaInicial = coordenadaInicial;
     }
-
-    
     
     public void setOrientacion(Orientacion orientacion) {
         this.orientacion = orientacion;
