@@ -15,13 +15,13 @@ import java.util.List;
 public class JugadorDTO {
     
     private String nombre;
-    private List<NaveDTO> flotilla = new ArrayList<>();
+    private List<NaveConfigDTO> flotilla = new ArrayList<>();
     private List<DisparoDTO> disparos = new ArrayList<>();
-    private Color color;
+    private String color;
 //    private Tablero tableroPropio;
 //    private Tablero tableroDisparos;
 
-    public JugadorDTO(String nombre, Color color) {
+    public JugadorDTO(String nombre, String color) {
         this.nombre = nombre;
         this.color = color;
 //        this.tableroPropio = new Tablero(this);
@@ -31,11 +31,11 @@ public class JugadorDTO {
     public JugadorDTO(){
     }
     
-    public void addNave(NaveDTO naveDTO){
+    public void addNave(NaveConfigDTO naveDTO){
         flotilla.add(naveDTO);
         
     }
-    public void removeNave(NaveDTO naveDTO){
+    public void removeNave(NaveConfigDTO naveDTO){
         flotilla.remove(naveDTO);
     }
     
@@ -47,11 +47,11 @@ public class JugadorDTO {
         this.nombre = nombre;
     }
 
-    public List<NaveDTO> getFlotilla() {
+    public List<NaveConfigDTO> getFlotilla() {
         return flotilla;
     }
 
-    public void setFlotilla(List<NaveDTO> flotilla) {
+    public void setFlotilla(List<NaveConfigDTO> flotilla) {
         this.flotilla = flotilla;
     }
 
@@ -63,14 +63,11 @@ public class JugadorDTO {
         this.disparos = disparos;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
-    }
-    
-    
-    
+    } 
 }

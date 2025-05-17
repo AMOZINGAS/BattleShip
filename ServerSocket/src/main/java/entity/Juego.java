@@ -32,7 +32,7 @@ public class Juego extends Observable{
     private GestorTurnos gestorTurnos;
 
     public Juego() {
-//        this.jugadores = new ArrayList<>();
+        this.jugadores = new ArrayList<>();
 //        this.tableros = new ArrayList<>();
         this.estado = new SinConfiguracion();
 //        this.gestorTurnos = new GestorTurnos(this);

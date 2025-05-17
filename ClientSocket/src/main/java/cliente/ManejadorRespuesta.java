@@ -29,17 +29,22 @@ public class ManejadorRespuesta {
         if (mensaje instanceof ResCrearPartida) {
             ResCrearPartida res = (ResCrearPartida) mensaje;
             modeloMenu.notificar(res);
+            return;
         }
-
+        
         if (mensaje instanceof ResUnirse) {
             ResUnirse res = (ResUnirse) mensaje;
             modeloMenu.notificar(res);
+            return;
         }
+        
         if(mensaje instanceof ResRegistrarJugador){
             ResRegistrarJugador res = (ResRegistrarJugador) mensaje;
             modeloMenu.notificar(mensaje);
-            
+            return;
         }
+        
+        System.out.println("ManejadorRespuesta - No se encontró el mensaje");
     }
 }
 

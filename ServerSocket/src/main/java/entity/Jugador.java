@@ -17,11 +17,11 @@ public class Jugador {
     private String nombre;
     private List<Nave> flotilla;
     private List<Disparo> disparos;
-    private Color color;
+    private String color;
     private Tablero tableroPropio;
 //    private Tablero tableroDisparos;
 
-    public Jugador(String nombre, Color color) {
+    public Jugador(String nombre, String color) {
         this.nombre = nombre;
         this.flotilla = new ArrayList<>();
         this.disparos = new ArrayList<>();
@@ -59,11 +59,11 @@ public class Jugador {
         this.disparos.add(disparo);
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
     

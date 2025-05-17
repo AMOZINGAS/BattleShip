@@ -24,4 +24,6 @@
         
         
     </properties>
+    <description>--add-opens java.desktop/javax.swing=ALL-UNNAMED
+--add-opens java.desktop/javax.swing.JComponent=ALL-UNNAMED</description>
 </project>

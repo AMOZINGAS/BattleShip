@@ -301,7 +301,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                 nave.setBounds(s4.getBounds());
                 break;
             default:
-                System.out.println("3");
+                System.out.println("ups, aprox linea 304");
             
         }
         nave.setVisible(true);
@@ -313,7 +313,7 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
     public void removerNaveJugador(CoordenadasDTO coordenada, NaveDTO naveRemove){
         
         System.out.println(jugador.getFlotilla());
-        jugador.removeNave(naveRemove);
+        jugador.removeNave(new NaveConfigDTO(naveRemove.getTipo(), naveRemove.getCoordenadaInicial(), naveRemove.getOrientacion()));
         System.out.println(jugador.getFlotilla());
 //        for(NaveDTO naveJugador: jugador.getFlotilla()){
 //            if(naveRemove.getCoordenadaInicial() == naveJugador.getCoordenadaInicial()){
@@ -505,25 +505,19 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
             }
         }
         
-        //2. Creamos un mensaje para el servidor (en JSON)
-        ReqRegistrarJugadorConfig peticionRegistro = new ReqRegistrarJugadorConfig(new JugadorDTO(txtNombre.getText(), color), configuracionNaves);
-        String jsonPeticion = ManejadorMensajes.toJson(peticionRegistro);
-
-        //3. Enviamos el mensaje al servidor
-        if (out != null && !out.checkError()) {
-            out.println(jsonPeticion);
-            out.flush(); //Para envío inmediato
-            System.out.println("Cliente: Enviando configuración al servidor: " + jsonPeticion);
-
-            //4. Cambiamos a la siguiente pantalla (Sala de Espera)
-            FrmSalaDeEspera frm = new FrmSalaDeEspera();
-            frm.setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo enviar la configuración al servidor. ", "Error de conexión", JOptionPane.ERROR_MESSAGE);
+        System.out.println("Tamaño naves: " + naves.size());
+        System.out.println("Naves");
+        for (NaveConfigDTO nave : configuracionNaves) {
+            System.out.println(nave.toString());
         }
+        //2. Creamos un mensaje para el servidor (en JSON)
+        ReqRegistrarJugadorConfig peticionRegistro = new ReqRegistrarJugadorConfig(new JugadorDTO(txtNombre.getText(), color.toString()), configuracionNaves);
+        String jsonPeticion = ManejadorMensajes.toJson(peticionRegistro); //<-- aquí da error
         
+        //3. Enviamos el mensaje al servidor
+        presentador.registrarJugadorConfig(jugador, configuracionNaves);
         
+        //4. Cambiamos a la siguiente pantalla (Sala de Espera)
         FrmSalaDeEspera frm = new FrmSalaDeEspera();
         frm.setVisible(true);
     }//GEN-LAST:event_btnListoActionPerformed
@@ -649,9 +643,10 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                             c.setNaveOcupante(nave);
                         }
                         nave.setCasillas(casillasOcupadas);
-                        nave.setCoordenadaInicial(casillaInicial.getCoordenada());
+                        nave.setCoordenadaInicial(new CoordenadasDTO(columna, fila));
                         matriz.getNaves().add(nave); // guarda la nave colocada en la lista del tablero
-                        jugador.addNave(nave);
+                        System.out.println("Nave colocada en: (" +columna + ", "+ fila +")" );
+                        jugador.addNave(new NaveConfigDTO(nave.getTipo(), nave.getCoordenadaInicial(), nave.getOrientacion()));
                         label.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "Colocación inválida: hay colisión o está fuera del tablero.");
@@ -664,8 +659,8 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
     }    
     
     public void pintar(){
-        if(jugador.getFlotilla()!=null){
-            for(NaveDTO nave: jugador.getFlotilla()){
+        if(matriz.getNaves()!=null){
+            for(NaveDTO nave: matriz.getNaves()){
                 for(CasillaDTO casilla: nave.getCasillas()){
                     casilla.setBackground(color);
                 }

@@ -12,7 +12,6 @@ import javax.swing.JPanel;
  * @author CISCO
  */
 public class MatrizDTO extends JPanel{
-    
     ArrayList<CasillaDTO> casillas = new ArrayList();
     ArrayList<NaveDTO> naves = new ArrayList();
     JugadorDTO jugador;

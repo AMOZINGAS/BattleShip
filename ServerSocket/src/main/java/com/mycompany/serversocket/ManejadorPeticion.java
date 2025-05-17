@@ -72,10 +72,12 @@ public class ManejadorPeticion {
     }
     
     private void handleRegistrarJugadorConfig(ReqRegistrarJugadorConfig mensaje) {
-    Jugador jugador = new Jugador(mensaje.getJugador().getNombre(), mensaje.getJugador().getColor());
-    List<NaveConfigDTO> configuracionNaves = mensaje.getConfigNaves();
+        Jugador jugador = new Jugador(mensaje.getJugador().getNombre(), mensaje.getJugador().getColor());
+        List<NaveConfigDTO> configuracionNaves = mensaje.getConfigNaves();
 
-    System.out.println("Servidor: Recibida configuración de " + jugador.getNombre());
+        System.out.println("Servidor: Recibida configuración de " + jugador.getNombre());
+        System.out.println("Jugador: " + jugador);
+        System.out.println("Naves tamaño: " + configuracionNaves.size());
     
     //1. Crear objetos Nave basados en la información recibida.
         if (jugador != null) {
@@ -85,9 +87,10 @@ public class ManejadorPeticion {
                 List<Nave> flotilla = new ArrayList<>();
                 INaveFactory factory = new NaveFactory();
                 try {
+                    int i=0;
                     for (NaveConfigDTO config : configuracionNaves) {
                         Nave nave = null;
-                        String tipoNave = config.getTipo().toLowerCase(); // Convertir a minúsculas para la comparación
+                        String tipoNave = config.getTipo().toLowerCase();
 
                         if (tipoNave.contains("barco")) {
                             nave = factory.crearBarco();
@@ -101,13 +104,15 @@ public class ManejadorPeticion {
                             System.err.println("Tipo de nave desconocido: " + config.getTipo());
                             continue; // Saltar a la siguiente nave si el tipo no coincide
                         }
-
                         Coordenada coordenadaInicial = new Coordenada(config.getCoordenadaInicial().getCoordenadasX(), config.getCoordenadaInicial().getCoordenadasY());
+                        jugador.agregarNave(nave);
+                        System.out.println(jugador.getFlotilla().get(i).getTipo() + " Añadido. ");
                         tablero.colocarNave(nave, coordenadaInicial, config.getOrientacion() == OrientacionENUM.HORIZONTAL ? Orientacion.HORIZONTAL : Orientacion.VERTICAL);
                         jugador.agregarNave(nave);
+                        i++;
                     }
                     System.out.println("Servidor: Naves de " + jugador.getNombre() + " colocadas en el tablero.");
-
+                    System.out.println("Cantidad de naves creadas: " + jugador.getFlotilla().size());
                     controlador.jugadorListoParaJugar(jugador, clientHandler);
                     clientHandler.sendMessage(new ResConfiguracionRecibida("CONFIGURACION_RECIBIDA"));
 

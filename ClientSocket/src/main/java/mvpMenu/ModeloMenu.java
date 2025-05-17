@@ -5,6 +5,9 @@
 package mvpMenu;
 
 import cliente.Cliente;
+import dtos.JugadorDTO;
+import dtos.NaveConfigDTO;
+import java.util.List;
 import java.util.Observable;
 import mensajes.Mensajes;
 
@@ -46,6 +49,12 @@ public class ModeloMenu extends Observable{
         conectar(puerto);
         if (cliente.isConnected()) {
             cliente.unirse();
+        }
+    }
+    
+    public void registrarJugadorConfig(JugadorDTO jugador, List<NaveConfigDTO> flotilla) {
+        if (cliente.isConnected()) {
+            cliente.registrarJugadorConfig(jugador, flotilla);
         }
     }
     

@@ -31,4 +31,9 @@ public class NaveConfigDTO {
     public OrientacionENUM getOrientacion() {
         return orientacion;
     }
+
+    @Override
+    public String toString() {
+        return "NaveConfigDTO{" + "tipo=" + tipo + ", coordenadaInicial=" + coordenadaInicial + ", orientacion=" + orientacion + '}';
+    }
 }

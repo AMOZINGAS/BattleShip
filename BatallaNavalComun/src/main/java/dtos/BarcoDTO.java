@@ -4,8 +4,6 @@
  */
 package dtos;
 
-import javax.swing.JLabel;
-
 /**
  *
  * @author CISCO

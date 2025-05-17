@@ -4,6 +4,8 @@
  */
 package cliente;
 
+import dtos.JugadorDTO;
+import dtos.NaveConfigDTO;
 import mensajes.Mensajes;
 import mensajes.ManejadorMensajes;
 import mensajes.ReqUnirse;
@@ -13,7 +15,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.rmi.UnknownHostException;
+import java.util.List;
 import mensajes.ReqCrearPartida;
+import mensajes.ReqRegistrarJugadorConfig;
 
 /**
  *
@@ -75,6 +79,10 @@ public class Cliente {
 
     public void unirse() {
         sendMessage(new ReqUnirse());
+    }
+    
+    public void registrarJugadorConfig(JugadorDTO jugador, List<NaveConfigDTO> flotilla){
+        sendMessage(new ReqRegistrarJugadorConfig(jugador, flotilla));
     }
 
     private class MessageListener implements Runnable {

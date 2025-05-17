@@ -231,7 +231,9 @@ public class Tablero {
     }
     
     private boolean coordenadaFueraDeTablero(Coordenada coordenada) {
-        return coordenada.getX() < 0 || coordenada.getX() >= 10 || coordenada.getY() < 0 || coordenada.getY() >= 10;
+        boolean fuera = coordenada.getX() < 0 || coordenada.getX() >= 10 || coordenada.getY() < 0 || coordenada.getY() >= 10;
+        System.out.println("Fuera: " + coordenada.getX() + ", " + coordenada.getY());
+        return fuera;
     }
 
     public Casilla obtenerCasilla(Coordenada coordenada) {

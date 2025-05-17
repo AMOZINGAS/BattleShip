@@ -4,6 +4,10 @@
  */
 package mvpMenu;
 
+import dtos.JugadorDTO;
+import dtos.NaveConfigDTO;
+import java.util.List;
+
 /**
  *
  * @author Amos Heli Olguin Quiroz
@@ -24,6 +28,10 @@ public class PresentadorMenu {
     
     public void crearPartida(int puerto){
         modeloMenu.crearPartida(puerto);
+    }
+    
+    public void registrarJugadorConfig(JugadorDTO jugador, List<NaveConfigDTO> flotilla){
+        modeloMenu.registrarJugadorConfig(jugador, flotilla);
     }
     
 }
