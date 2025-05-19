@@ -23,13 +23,21 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnCrearPartida" max="32767" attributes="0"/>
-                  <Component id="btnUnirse" max="32767" attributes="0"/>
-                  <Component id="txtPort" max="32767" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="277" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnCrearPartida" max="32767" attributes="0"/>
+                          <Component id="btnUnirse" max="32767" attributes="0"/>
+                          <Component id="txtPort" max="32767" attributes="0"/>
+                          <Component id="jLabel1" min="-2" pref="277" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" pref="153" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="115" max="32767" attributes="0"/>
           </Group>
@@ -40,11 +48,13 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-              <Component id="btnCrearPartida" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="txtPort" min="-2" pref="32" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="btnCrearPartida" min="-2" pref="35" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnUnirse" min="-2" pref="32" max="-2" attributes="0"/>
               <EmptySpace pref="69" max="32767" attributes="0"/>
           </Group>
@@ -80,6 +90,11 @@
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="BATTLE SHIP"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Inserte el puerto del servidor"/>
       </Properties>
     </Component>
   </SubComponents>
