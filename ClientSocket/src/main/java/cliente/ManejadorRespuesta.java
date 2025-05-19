@@ -5,6 +5,7 @@
 package cliente;
 
 import mensajes.Mensajes;
+import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
 import mensajes.ResRegistrarJugador;
 import mensajes.ResUnirse;
@@ -40,7 +41,13 @@ public class ManejadorRespuesta {
         
         if(mensaje instanceof ResRegistrarJugador){
             ResRegistrarJugador res = (ResRegistrarJugador) mensaje;
-            modeloMenu.notificar(mensaje);
+            modeloMenu.notificar(res);
+            return;
+        }
+        
+        if(mensaje instanceof ResConfiguracionRecibida){
+            ResConfiguracionRecibida res = (ResConfiguracionRecibida) mensaje;
+            modeloMenu.notificar(res);
             return;
         }
         

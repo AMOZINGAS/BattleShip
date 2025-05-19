@@ -62,7 +62,7 @@ public class Controlador implements Observer {
     }
 
     public void jugadorListoParaJugar(Jugador jugador, ManejadorCliente aThis){
-        System.out.println("Controlador: Jugador " + jugador.getNombre() + " está listo.");
+        System.out.println("Controlador: Jugador " + jugador.getNombre() + " esta listo.");
         jugadoresListos.put(jugador, true);
         
         if (estanTodosJugadoresListos()) {
@@ -95,7 +95,12 @@ public class Controlador implements Observer {
             if(mensaje.getComando().equals("JUGADOR_UNIDO")) {
                 System.out.println("se unioooo!!");
                 server.broadcastMessage(mensaje, clientHandler);
-            }else {
+            }
+            if(mensaje.getComando().equals("ESPERANDO_OPONTENTE")) {
+                System.out.println("esperandin....");
+                server.broadcastMessage(mensaje, clientHandler);
+            }
+            else {
                 System.out.println("Controlador esta recibiendo esto: " + mensaje.getComando());
                 server.broadcastMessage(mensaje, clientHandler);
             }
@@ -104,12 +109,16 @@ public class Controlador implements Observer {
     }
     
     private boolean estanTodosJugadoresListos() {
+        if(jugadoresListos.size() <= 1){
+            return false;
+        }
+        
         for (boolean listo : jugadoresListos.values()) {
             if (!listo) {
-                return false; // Si al menos un jugador no está listo, devolvemos false
+                return false; //Si al menos un jugador no está listo, es false
             }
         }
-        return true; // Todos los jugadores están listos
+        return true; //Todos los jugadores están listos
     }
     
 //    private ManejadorCliente obtenerManejadorCliente(Jugador jugador) {

@@ -79,6 +79,14 @@ public class ModeloMenu extends Observable{
                 setChanged();
                 notifyObservers(message);
                 break;
+            case "ESPERANDO_OPONENTE":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "CONFIGURACION_RECIBIDA":
+                setChanged();
+                notifyObservers(message);
+                break;
             default:
                 System.out.println("no llego nada :(");
         }

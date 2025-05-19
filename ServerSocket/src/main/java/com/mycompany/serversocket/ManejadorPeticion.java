@@ -102,15 +102,18 @@ public class ManejadorPeticion {
                             nave = factory.crearPortaAviones();
                         } else {
                             System.err.println("Tipo de nave desconocido: " + config.getTipo());
-                            continue; // Saltar a la siguiente nave si el tipo no coincide
+                            continue; //Saltar a la siguiente nave si el tipo no coincide
                         }
+                        //2. Colocar las naves en el Tablero del Jugador.
                         Coordenada coordenadaInicial = new Coordenada(config.getCoordenadaInicial().getCoordenadasX(), config.getCoordenadaInicial().getCoordenadasY());
+                        tablero.colocarNave(nave, coordenadaInicial, config.getOrientacion() == OrientacionENUM.HORIZONTAL ? Orientacion.HORIZONTAL : Orientacion.VERTICAL);
+                        
+                        //3. Almacenar la configuración del jugador.
                         jugador.agregarNave(nave);
                         System.out.println(jugador.getFlotilla().get(i).getTipo() + " Añadido. ");
-                        tablero.colocarNave(nave, coordenadaInicial, config.getOrientacion() == OrientacionENUM.HORIZONTAL ? Orientacion.HORIZONTAL : Orientacion.VERTICAL);
-                        jugador.agregarNave(nave);
                         i++;
                     }
+                    
                     System.out.println("Servidor: Naves de " + jugador.getNombre() + " colocadas en el tablero.");
                     System.out.println("Cantidad de naves creadas: " + jugador.getFlotilla().size());
                     controlador.jugadorListoParaJugar(jugador, clientHandler);
@@ -129,9 +132,5 @@ public class ManejadorPeticion {
     //        clientHandler.sendMessage(new ResError("ERROR_CONFIGURACION", "Jugador no identificado."));
         }
     }
-    
-    //2. Colocar las naves en el Tablero del Jugador.
-    
-    //3. Almacenar la configuración del jugador.
     
 }

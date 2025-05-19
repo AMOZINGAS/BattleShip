@@ -71,7 +71,7 @@ public class Tablero {
         //For para poder filtrar coordenas o casillas válidas
         for (Coordenada coordenada : coordenadas) {
             if(coordenadaFueraDeTablero(coordenada)){
-                throw new ServerLogicException("Intento de colocar de nave en coordenada fuera del tablero");
+                throw new ServerLogicException("Intento de colocar de nave en coordenada fuera del tablero: (" + coordenada.getX() + ", " + coordenada.getY() + ") ");
             }
             
             if(obtenerCasilla(coordenada).estaOcupada()){
@@ -231,9 +231,7 @@ public class Tablero {
     }
     
     private boolean coordenadaFueraDeTablero(Coordenada coordenada) {
-        boolean fuera = coordenada.getX() < 0 || coordenada.getX() >= 10 || coordenada.getY() < 0 || coordenada.getY() >= 10;
-        System.out.println("Fuera: " + coordenada.getX() + ", " + coordenada.getY());
-        return fuera;
+        return coordenada.getX() < 0 || coordenada.getX() >= 10 || coordenada.getY() < 0 || coordenada.getY() >= 10;
     }
 
     public Casilla obtenerCasilla(Coordenada coordenada) {

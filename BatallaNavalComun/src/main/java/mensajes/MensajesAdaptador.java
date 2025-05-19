@@ -24,28 +24,27 @@ public class MensajesAdaptador implements JsonSerializer<Mensajes>, JsonDeserial
     }   
     
     @Override
-    public Mensajes deserialize(JsonElement json, Type type, JsonDeserializationContext context) 
-            throws JsonParseException {
+    public Mensajes deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
         String comando = jsonObject.get("comando").getAsString();
-        
+
         try {
             Class<? extends Mensajes> messageClass = switch (comando) {
-                // requestsss
-                case "CREAR_PARTIDA" -> ReqCrearPartida.class;
-                case "UNIRSE" -> ReqUnirse.class;
-                case "REGISTRAR_JUGADOR_CONFIGURACION" -> ReqRegistrarJugadorConfig.class;
-                    
-                // Response
-                case "JUGADOR_UNIDO", "JUGADOR_NO_UNIDO" -> ResUnirse.class;
-                case "PARTIDA_CREADA", "PARTIDA_NO_CREADA" -> ResCrearPartida.class;
-                    
-                default -> throw new JsonParseException("Comando desconocido: " + comando);
+                    // requestsss
+                    case "CREAR_PARTIDA" -> ReqCrearPartida.class;
+                    case "UNIRSE" -> ReqUnirse.class;
+                    case "REGISTRAR_JUGADOR_CONFIGURACION" -> ReqRegistrarJugadorConfig.class;
+
+                    // Response
+                    case "JUGADOR_UNIDO", "JUGADOR_NO_UNIDO" -> ResUnirse.class;
+                    case "PARTIDA_CREADA", "PARTIDA_NO_CREADA" -> ResCrearPartida.class;
+                    case "ESPERANDO_OPONENTE" -> ResRegistrarJugador.class; 
+                    case "CONFIGURACION_RECIBIDA" -> ResConfiguracionRecibida.class;
+                    default -> throw new JsonParseException("Comando desconocido: " + comando);
             };
-            
+
             return context.deserialize(json, messageClass);
         } catch (Exception e) {
-            
             throw new JsonParseException("Error deserializando mensaje. " + "Comando: " +comando + " No reconocido", e);
         }
     }

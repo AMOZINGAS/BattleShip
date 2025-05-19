@@ -482,10 +482,13 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
             JOptionPane.showMessageDialog(this, "Elija un nombre para seguir. ", "Nombre incompleto", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if(txtNombre.getText().length() < 5){
+        
+        String nombre = txtNombre.getText();
+        if(nombre.length() < 5){
             JOptionPane.showMessageDialog(this, "El nombre debe ser mayor a 4 caracteres. ", "Nombre inválido", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        jugador.setNombre(nombre);
         
         //Petición al servidor
         // 1. Recopilar la información del tablero
@@ -510,9 +513,10 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         for (NaveConfigDTO nave : configuracionNaves) {
             System.out.println(nave.toString());
         }
+        
         //2. Creamos un mensaje para el servidor (en JSON)
-        ReqRegistrarJugadorConfig peticionRegistro = new ReqRegistrarJugadorConfig(new JugadorDTO(txtNombre.getText(), color.toString()), configuracionNaves);
-        String jsonPeticion = ManejadorMensajes.toJson(peticionRegistro); //<-- aquí da error
+//        ReqRegistrarJugadorConfig peticionRegistro = new ReqRegistrarJugadorConfig(new JugadorDTO(nombre, color.toString()), configuracionNaves);
+//        String jsonPeticion = ManejadorMensajes.toJson(peticionRegistro);
         
         //3. Enviamos el mensaje al servidor
         presentador.registrarJugadorConfig(jugador, configuracionNaves);
@@ -526,7 +530,10 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
         
         color = JColorChooser.showDialog(null, "Color", Color.black);
-        pintar();
+        
+        if(color != null){
+            pintar();
+        }
         
     }//GEN-LAST:event_btnColorActionPerformed
 
@@ -665,6 +672,9 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
                     casilla.setBackground(color);
                 }
             }
+        }
+        if(color != null){
+            jugador.setColor(color.toString());
         }
     }
     
