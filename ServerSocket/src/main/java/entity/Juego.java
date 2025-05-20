@@ -86,6 +86,7 @@ public class Juego extends Observable{
             ResUnirse res = new ResUnirse("JUGADOR_UNIDO");
 //            this.addJugador(new Jugador("", Color.ROJO));
             notifyObservers(res);
+            System.out.println("Juego: Notifique: Jugador Unido");
         } else {
             setChanged();
             notifyObservers(new ResUnirse("JUGADOR_NO_UNIDO"));
@@ -98,6 +99,7 @@ public class Juego extends Observable{
             instance.getEstado().manejarEstado(instance);
             setChanged();
             notifyObservers(new ResCrearPartida("PARTIDA_CREADA"));
+            System.out.println("Juego: Notifique: partida creada");
         } else {
             setChanged();
             notifyObservers(new ResCrearPartida("PARTIDA_NO_CREADA"));

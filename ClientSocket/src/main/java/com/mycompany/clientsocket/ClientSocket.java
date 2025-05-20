@@ -22,8 +22,8 @@ public class ClientSocket {
 
         ModeloMenu modeloMenu = ModeloMenu.getInstance();
         modeloMenu.setCliente(cliente);
+        
         PresentadorMenu controladorMenu = new PresentadorMenu(modeloMenu);
-
         VistaMenu vistaMenu = new VistaMenu(controladorMenu);
         VistaConfiguracion vistaConf = new VistaConfiguracion(controladorMenu);
 
