@@ -77,6 +77,11 @@ public class Controlador implements Observer {
         modelo.disparar(juego, mensaje);
     }
     
+    public void pasarTurno(Mensajes mensaje, ManejadorCliente aThis){
+    
+        this.clientHandler = aThis;
+        modelo.disparar(juego, mensaje);
+    }   
     
     public void unirse(Mensajes mensaje, ManejadorCliente aThis) {
         this.clientHandler = aThis;
@@ -107,6 +112,23 @@ public class Controlador implements Observer {
             if(mensaje.getComando().equals("TURNO")){
                 System.out.println("permiso para disparar shi sheñool");
                 server.broadcastMessage(mensaje, clientHandler);
+                
+            }if(mensaje.getComando().equals("AGUA")){
+                System.out.println("Falaste por malo...");
+                server.broadcastMessage(mensaje, clientHandler);
+                
+            }if(mensaje.getComando().equals("IMPA CTO")){
+                System.out.println("Tremendo tino papi...");
+                server.broadcastMessage(mensaje, clientHandler);
+                
+            }if(mensaje.getComando().equals("NO_TURNO")){
+                System.out.println("Perdiste tu turno campeon");
+                server.broadcastMessage(mensaje, clientHandler);
+                
+            }if(mensaje.getComando().equals("SI_TURNO")){
+                System.out.println("Sigues tu, arraza, padrino");
+                server.broadcastMessage(mensaje, clientHandler);
+                
             }
             else {
                 System.out.println("Controlador esta recibiendo esto: " + mensaje.getComando());

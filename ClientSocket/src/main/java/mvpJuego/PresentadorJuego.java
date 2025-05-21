@@ -20,6 +20,10 @@ public class PresentadorJuego {
         this.modeloJuego = ModeloJuego.getInstance();
     }
     
+    public void pasarTurno(){
+        modeloJuego.pasarTurno();
+    }
+    
     public String getNombre(){
         
         return modeloJuego.getNombre();   

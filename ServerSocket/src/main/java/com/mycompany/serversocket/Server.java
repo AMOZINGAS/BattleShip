@@ -13,7 +13,9 @@ import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
 import mensajes.ResDisparo;
 import mensajes.ResJugadoresListosConfigurado;
+import mensajes.ResTurnoF;
 import mensajes.ResTurno;
+import mensajes.ResTurnoT;
 import mensajes.ResUnirse;
 
 /**
@@ -92,6 +94,16 @@ public class Server {
                 }
             }
         }else if(mensaje instanceof ResDisparo){
+            for(ManejadorCliente client: clients){
+                client.sendMessage(mensaje);
+            }
+        }else if(mensaje instanceof ResTurnoT){
+            for(ManejadorCliente client: clients){
+                if(client != sender){
+                    client.sendMessage(mensaje);
+                }
+            }
+        }else if(mensaje instanceof ResTurnoF){
             for(ManejadorCliente client: clients){
                 if(client == sender){
                     client.sendMessage(mensaje);

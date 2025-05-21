@@ -395,31 +395,41 @@ public class VistaJuego extends javax.swing.JFrame implements Observer{
                 ultimaCoordenadaDisparada = null; // Reinicia la última coordenada disparada al cambiar el turno.
                                                  // Esto es importante para evitar pintar incorrectamente si un jugador se desconecta, etc.
             }
+            
+            if(comando.equals("SI_TURNO")){
+                lblTurno.setText("Es tu turno, campeón");
+                habilitarDeshabilitarTablero2(true);
+            }
+            
+            if(comando.equals("NO_TURNO")){
+                lblTurno.setText("No es tu turno ._.");
+                habilitarDeshabilitarTablero2(false);
+            }
 
             if(comando.equals("AGUA")){
                 System.out.println("No dio, ni modo: AGUA");
                 ResDisparo dis = (ResDisparo) arg;
+                CoordenadasDTO coord = dis.getCoordendadDelAtaque();
                 // Usa la última coordenada que tu cliente disparó
-                if (ultimaCoordenadaDisparada != null) {
-                    pintarCasillaTablero2(ultimaCoordenadaDisparada, Color.BLACK); // Agua: Negro
+                if (coord != null) {
+                    pintarCasillaTablero2(coord, Color.BLACK); // Agua: Negro
                 } else {
                     System.err.println("Error: No se encontró la última coordenada disparada para AGUA.");
                 }
-                boolean esMiTurno = (jugador != null && dis.getJugadorEnTurno().getNombre().equalsIgnoreCase(jugador.getNombre()));
-                turno = esMiTurno;
+                presentadorJuego.pasarTurno();
             }
 
             if(comando.equals("IMPACTO")){
                 System.out.println("Sí dio: IMPACTO");
                 ResDisparo dis = (ResDisparo) arg;
+                CoordenadasDTO coord = dis.getCoordendadDelAtaque();
                 // Usa la última coordenada que tu cliente disparó
-                if (ultimaCoordenadaDisparada != null) {
-                    pintarCasillaTablero2(ultimaCoordenadaDisparada, Color.YELLOW); // Impacto: Amarillo
+                if (coord != null) {
+                    pintarCasillaTablero2(coord, Color.YELLOW); // Impacto: Amarillo
                 } else {
                     System.err.println("Error: No se encontró la última coordenada disparada para IMPACTO.");
                 }
-                boolean esMiTurno = (jugador != null && dis.getJugadorEnTurno().getNombre().equalsIgnoreCase(jugador.getNombre()));
-                turno = esMiTurno;
+                
             }
 
             if(comando.equals("NAVE_HUNDIDA")){

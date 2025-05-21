@@ -29,6 +29,7 @@ import java.util.Observable;
 import java.util.concurrent.ConcurrentHashMap;
 import mensajes.Mensajes;
 import mensajes.ReqDisparo;
+import mensajes.ReqPasarTurno;
 import mensajes.ReqRegistrarJugadorConfig;
 import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
@@ -54,33 +55,8 @@ public class ModeloServer extends Observable{
     public void disparar(Juego juego, Mensajes mensaje){
         ReqDisparo req = (ReqDisparo) mensaje;
         DisparoDTO disparo = req.getDisparo();
-        try{
-            Coordenada coordenada = new Coordenada(disparo.getCoordenadas().getCoordenadasX(), disparo.getCoordenadas().getCoordenadasY());
-            juego.procesarDisparo(juego.getJugadorEnTurno(), coordenada);
-            if(juego.getDisparos().getLast().getResultado().equals(Resultado.AGUA)){
-                setChanged();
-                notifyObservers(new ResDisparo("AGUA", new JugadorDTO(juego.getJugadorEnTurno().getNombre(), juego.getJugadorEnTurno().getColor())));
-                System.out.println("MS - notificando agua");
-            }else{
-                setChanged();
-                notifyObservers(new ResDisparo("IMPACTO", new JugadorDTO(juego.getJugadorEnTurno().getNombre(), juego.getJugadorEnTurno().getColor())));
-                System.out.println("MS - notificando impacto");
-            }
-            
-            //Si la nave se hundió
-            Tablero tableroObjetivo = (juego.getJugadorEnTurno() == juego.getJugador1()) ? juego.getTableroJugador2() : juego.getTableroJugador1();
-            Nave nave = tableroObjetivo.obtenerNaveEnCasilla(coordenada);
-            if(nave != null && nave.estaHundida()){
-                setChanged();
-                List<CoordenadasDTO> coords = new ArrayList<>();
-                for (Casilla casilla : tableroObjetivo.obtenerNaveEnCasilla(coordenada).getCasillas()) {
-                    coords.add(new CoordenadasDTO(casilla.getCoordenada().getX(), casilla.getCoordenada().getY()));
-                }
-                notifyObservers(new ResNaveHundida(coords));
-            }
-        }catch(ServerLogicException e){
-            System.out.println("Error al disparar en el server :(");
-        }
+        juego.realizarDisparo(disparo);
+        
         
     }
 
@@ -95,4 +71,11 @@ public class ModeloServer extends Observable{
         juego.unirse();
 
     }    
+    
+    public void pasarTurno(Juego juego, Mensajes mensaje){
+        
+        juego.pasarTurno();
+        
+    }
+    
 }

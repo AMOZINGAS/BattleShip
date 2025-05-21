@@ -6,6 +6,8 @@ package entity;
 
 import entity.Disparo;
 import capaLogica.excepciones.ServerLogicException;
+import dtos.CoordenadasDTO;
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.NaveConfigDTO;
 import dtos.OrientacionENUM;
@@ -20,10 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import mensajes.ReqRegistrarJugadorConfig;
 import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
+import mensajes.ResDisparo;
 import mensajes.ResJuegoIniciado;
 import mensajes.ResJugadoresListosConfigurado;
+import mensajes.ResNaveHundida;
+import mensajes.ResTurnoF;
 import mensajes.ResRegistrarJugador;
 import mensajes.ResTurno;
+import mensajes.ResTurnoT;
 
 /**
  *
@@ -66,6 +72,38 @@ public class Juego extends Observable{
         tableros.add(jugador.getTableroPropio());
 
     }
+     
+     public void realizarDisparo(DisparoDTO disparo){
+         try{
+            Coordenada coordenada = new Coordenada(disparo.getCoordenadas().getCoordenadasX(), disparo.getCoordenadas().getCoordenadasY());
+            instance.procesarDisparo(instance.getJugadorEnTurno(), coordenada);
+            CoordenadasDTO coord = new CoordenadasDTO(coordenada.getX(), coordenada.getY());
+            if(instance.getDisparos().getLast().getResultado().equals(Resultado.AGUA)){
+                setChanged();
+                notifyObservers(new ResDisparo("AGUA", new JugadorDTO(instance.getJugadorEnTurno().getNombre(), instance.getJugadorEnTurno().getColor()), coord));
+                System.out.println("MS - notificando agua");
+            }else{
+                setChanged();
+                notifyObservers(new ResDisparo("IMPACTO", new JugadorDTO(instance.getJugadorEnTurno().getNombre(), instance.getJugadorEnTurno().getColor()), coord));
+                System.out.println("MS - notificando impacto");
+            }
+            
+            //Si la nave se hundió
+            Tablero tableroObjetivo = (instance.getJugadorEnTurno() == instance.getJugador1()) ? instance.getTableroJugador2() : instance.getTableroJugador1();
+            Nave nave = tableroObjetivo.obtenerNaveEnCasilla(coordenada);
+            if(nave != null && nave.estaHundida()){
+                setChanged();
+                List<CoordenadasDTO> coords = new ArrayList<>();
+                for (Casilla casilla : tableroObjetivo.obtenerNaveEnCasilla(coordenada).getCasillas()) {
+                    coords.add(new CoordenadasDTO(casilla.getCoordenada().getX(), casilla.getCoordenada().getY()));
+                }
+                notifyObservers(new ResNaveHundida(coords));
+            }
+        }catch(ServerLogicException e){
+            System.out.println("Error al disparar en el server :(");
+        }
+     }
+     
     private boolean isJugadoresListos() {
         if(jugadoresListos.size() <= 1){
             return false;
@@ -218,6 +256,13 @@ public class Juego extends Observable{
             notifyObservers(new ResCrearPartida("PARTIDA_NO_CREADA"));
         }
         
+    }
+    
+    public synchronized  void pasarTurno(){
+        setChanged();
+        notifyObservers(new ResTurnoF("NO_TURNO"));
+        setChanged();
+        notifyObservers(new ResTurnoT("SI_TURNO"));
     }
     
     public synchronized void iniciarPartida(){

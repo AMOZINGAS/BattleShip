@@ -27,6 +27,7 @@ public class ClientSocket {
         ModeloJuego modeloJuego = ModeloJuego.getInstance();
         
         modeloMenu.setCliente(cliente);
+        modeloJuego.setCliente(cliente);
         
         PresentadorJuego controlJuego = new PresentadorJuego(modeloJuego);
         PresentadorMenu controladorMenu = new PresentadorMenu(modeloMenu);

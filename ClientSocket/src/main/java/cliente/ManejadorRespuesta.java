@@ -11,8 +11,10 @@ import mensajes.ResDisparo;
 import mensajes.ResJuegoIniciado;
 import mensajes.ResJugadoresListosConfigurado;
 import mensajes.ResNaveHundida;
+import mensajes.ResTurnoF;
 import mensajes.ResRegistrarJugador;
 import mensajes.ResTurno;
+import mensajes.ResTurnoT;
 import mensajes.ResUnirse;
 import mvpJuego.ModeloJuego;
 import mvpMenu.ModeloMenu;
@@ -68,7 +70,6 @@ public class ManejadorRespuesta {
         
         if(mensaje instanceof ResDisparo){
             ResDisparo res = (ResDisparo) mensaje;
-            modeloMenu.notificar(res);
             modeloJuego.notificar(res);
             return;
         }
@@ -77,6 +78,18 @@ public class ManejadorRespuesta {
             ResNaveHundida res = (ResNaveHundida) mensaje;
             modeloMenu.notificar(res);
             modeloJuego.notificar(res);
+            return;
+        }
+        
+        if(mensaje instanceof ResTurnoF){
+            ResTurnoF res = (ResTurnoF) mensaje;
+            modeloJuego.notificar(mensaje);
+            return;
+        }
+        
+        if(mensaje instanceof ResTurnoT){
+            ResTurnoT res = (ResTurnoT) mensaje;
+            modeloJuego.notificar(mensaje);
             return;
         }
         

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import mensajes.Mensajes;
 import mensajes.ReqDisparo;
+import mensajes.ReqPasarTurno;
 import mensajes.ReqRegistrarJugadorConfig;
 import mensajes.ReqUnirse;
 import mensajes.ResConfiguracionRecibida;
@@ -64,6 +65,8 @@ public class ManejadorPeticion {
             case "REALIZAR_DISPARO":
                 handleDisparo((ReqDisparo)(mensaje));
                 break;
+            case "PASAR_TURNO":
+                handlePasarTurno((ReqPasarTurno) (mensaje));
             default:
                 System.out.println("Comando desconocido: " + mensaje.getComando());
         }
@@ -83,6 +86,10 @@ public class ManejadorPeticion {
     
     private void handleDisparo(ReqDisparo mensaje) {
         controlador.Disparar(mensaje, clientHandler);
+    }
+    
+    private void handlePasarTurno(ReqPasarTurno mensaje){
+        controlador.pasarTurno(mensaje, clientHandler);
     }
     
 }

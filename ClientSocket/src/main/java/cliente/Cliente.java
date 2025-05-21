@@ -19,6 +19,7 @@ import java.rmi.UnknownHostException;
 import java.util.List;
 import mensajes.ReqCrearPartida;
 import mensajes.ReqDisparo;
+import mensajes.ReqPasarTurno;
 import mensajes.ReqRegistrarJugadorConfig;
 
 /**
@@ -91,6 +92,10 @@ public class Cliente {
         sendMessage(new ReqDisparo(disparo));
     }
 
+    public void pasarTurno(){
+        sendMessage(new ReqPasarTurno());
+    }
+    
     private class MessageListener implements Runnable {
         private boolean running = true;
 

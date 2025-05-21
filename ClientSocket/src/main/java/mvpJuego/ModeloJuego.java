@@ -43,7 +43,9 @@ public class ModeloJuego extends Observable{
         return instance == null ? (instance = new ModeloJuego()) : instance;
     }
     
-    
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
     
     public void obtenerJugador(String nombre){
         
@@ -72,6 +74,12 @@ public class ModeloJuego extends Observable{
     
     public JugadorDTO getJugador(){
         return this.jugador;
+    }
+    
+    public void pasarTurno() {
+         if(cliente.isConnected()) {
+            cliente.pasarTurno();
+        }
     }
     
     public void notificar(Mensajes message) {
@@ -103,6 +111,14 @@ public class ModeloJuego extends Observable{
                 break;
             case "TURNO":
 //                ResTurno tur = (ResTurno) message;
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "SI_TURNO":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "NO_TURNO":
                 setChanged();
                 notifyObservers(message);
                 break;
