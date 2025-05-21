@@ -36,6 +36,7 @@ public class MensajesAdaptador implements JsonSerializer<Mensajes>, JsonDeserial
                 case "REGISTRAR_JUGADOR_CONFIGURACION" -> ReqRegistrarJugadorConfig.class;
                 case "SOLICITAR_INICIO" -> ReqSolicitarInicio.class;
                 case "REALIZAR_DISPARO" -> ReqDisparo.class;
+                case "PASAR_TURNO" -> ReqPasarTurno.class;
 
 
                 // Response
@@ -46,7 +47,8 @@ public class MensajesAdaptador implements JsonSerializer<Mensajes>, JsonDeserial
                 case "ESPERANDO_OPONENTE" -> ResRegistrarJugador.class; 
                 case "CONFIGURACION_RECIBIDA" -> ResConfiguracionRecibida.class;
                 case "TURNO" -> ResTurno.class;
-                case "AGUA, IMPACTO" -> ResDisparo.class;
+                case "SI_TURNO" -> ResTurnoF.class;
+                case "AGUA", "IMPACTO" -> ResDisparo.class;
                 case "NAVE_HUNDIDA" -> ResNaveHundida.class;
                 default -> throw new JsonParseException("Comando desconocido: " + comando);
             };

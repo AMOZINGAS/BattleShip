@@ -4,6 +4,7 @@
  */
 package mensajes;
 
+import dtos.CoordenadasDTO;
 import dtos.JugadorDTO;
 
 /**
@@ -12,14 +13,19 @@ import dtos.JugadorDTO;
  */
 public class ResDisparo extends Mensajes{
     private JugadorDTO jugadorEnTurno;
-    
-    public ResDisparo(String comando, JugadorDTO jugadorEnTurno) {
+    private CoordenadasDTO coordenada;
+    public ResDisparo(String comando, JugadorDTO jugadorEnTurno, CoordenadasDTO coordenada) {
         super(comando);
+        this.coordenada = coordenada;
         this.jugadorEnTurno = jugadorEnTurno;
     }
 
     public JugadorDTO getJugadorEnTurno() {
         return jugadorEnTurno;
     }    
+    
+    public CoordenadasDTO getCoordendadDelAtaque(){
+        return this.coordenada;
+    }
     
 }
