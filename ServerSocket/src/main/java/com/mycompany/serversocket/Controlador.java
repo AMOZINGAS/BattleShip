@@ -72,6 +72,11 @@ public class Controlador implements Observer {
         modelo.configurarJugador(juego, mensaje);
     }
     
+    public void Disparar(Mensajes mensaje, ManejadorCliente aThis){
+        this.clientHandler = aThis;
+        modelo.disparar(juego, mensaje);
+    }
+    
     
     public void unirse(Mensajes mensaje, ManejadorCliente aThis) {
         this.clientHandler = aThis;
@@ -97,6 +102,10 @@ public class Controlador implements Observer {
             }
             if(mensaje.getComando().equals("CONFIGURACION_RECIBIDA")){
                 System.out.println("Jugador configurado ._.");
+                server.broadcastMessage(mensaje, clientHandler);
+            }
+            if(mensaje.getComando().equals("TURNO")){
+                System.out.println("permiso para disparar shi sheñool");
                 server.broadcastMessage(mensaje, clientHandler);
             }
             else {

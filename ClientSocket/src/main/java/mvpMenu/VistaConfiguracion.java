@@ -645,7 +645,24 @@ public class VistaConfiguracion extends javax.swing.JFrame implements Observer{
 
                         casillasOcupadas.add(celda);
                     }
+                    
+                    for (int i = 0; i < nave.getTamanio(); i++) {
+                        int f = fila + i * dx;
+                        int c = columna + i * dy;
+                        if (f >= 10 || c >= 10) {
+                            valido = false;
+                            break;
+                        }
+                        //los "10" son las filas y columnas, tmbn podemos poner una variable en algun lado para definirlas
+                        CasillaDTO celda = (CasillaDTO) TableroJP.getComponent(f * 10 + c);
+                        if (celda.getNaveOcupante() != null) {
+                            valido = false;
+                            break;
+                        }
 
+                        casillasOcupadas.add(celda);
+                    }
+                    
                     // Si es válido, pintar y asignar nave
                     if (valido) {
                         for (CasillaDTO c : casillasOcupadas) {

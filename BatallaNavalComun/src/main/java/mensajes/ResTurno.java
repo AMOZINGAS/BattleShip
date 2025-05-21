@@ -4,19 +4,21 @@
  */
 package mensajes;
 
+import dtos.JugadorDTO;
+
 /**
  *
  * @author Beto_
  */
 public class ResTurno extends Mensajes{
-    private String jugadorEnTurno;
+        private JugadorDTO jugadorEnTurno;
 
-    public ResTurno(String jugadorEnTurno) {
+    public ResTurno(JugadorDTO jugadorEnTurno) {
         super("TURNO");
         this.jugadorEnTurno = jugadorEnTurno;
     }
 
-    public String getJugadorEnTurno() {
+    public JugadorDTO getJugadorEnTurno() {
         return jugadorEnTurno;
     }
 }

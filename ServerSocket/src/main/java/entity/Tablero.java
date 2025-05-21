@@ -49,6 +49,7 @@ public class Tablero {
         for (Coordenada coordenada : coordenadas) {
             Casilla casilla = obtenerCasilla(coordenada);
             casilla.ocupar(nave);
+            System.out.println("Ocupada coordenada: " + casilla.getCoordenada().getX() + casilla.getCoordenada().getY());
         }
         naves.add(nave);
         nave.setCasillas(obtenerCasillas(coordenadas));
@@ -166,12 +167,15 @@ public class Tablero {
         int x = coordenadaInicial.getX();
         int y = coordenadaInicial.getY();
         
+        System.out.println(" ");
         for(int i = 0; i < tamanio; i++){
             if(orientacion == Orientacion.HORIZONTAL){
                 coordenadas.add(new Coordenada(x+i, y));
+                System.out.println("Colocación en: " + x+i + ", " + y);
             }else{
                 coordenadas.add(new Coordenada(x, y+i));
             }
+            System.out.println("Colocación en: " + x + ", " + y+i);
         }
         return coordenadas;
     }

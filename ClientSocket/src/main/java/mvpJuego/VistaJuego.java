@@ -6,14 +6,18 @@ package mvpJuego;
 
 import dtos.CasillaDTO;
 import dtos.CoordenadasDTO;
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.MatrizDTO;
 import dtos.NaveConfigDTO;
 import dtos.NaveDTO;
 import dtos.OrientacionENUM;
+import dtos.ResultadoENUM;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,39 +26,40 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import mensajes.Mensajes;
 import mensajes.ResConfiguracionRecibida;
+import mensajes.ResDisparo;
 import mensajes.ResJugadoresListosConfigurado;
+import mensajes.ResNaveHundida;
+import mensajes.ResTurno;
+import mvpMenu.PresentadorMenu;
 
 /**
  *
  * @author Amos Heli Olguin Quiroz
  */
 public class VistaJuego extends javax.swing.JFrame implements Observer{
-    
-    
-    
     private final PresentadorJuego presentadorJuego;
+    private PresentadorMenu presentador;
     private MatrizDTO matriz;
     private JugadorDTO jugador;
+    private boolean turno = false;
+    private final int tabSize = 10;
+    private boolean tablerosInicializados = false;
+    private CoordenadasDTO ultimaCoordenadaDisparada;
+    
     /**
      * Creates new form vistaJuego
      */
-    public VistaJuego(PresentadorJuego presentadorJuego) {
+    public VistaJuego(PresentadorJuego presentadorJuego, PresentadorMenu presentador) {
         this.presentadorJuego = presentadorJuego;
-        this.matriz = new MatrizDTO(jugador);
+        this.presentador = presentador;
+        this.matriz = new MatrizDTO(null);
         initComponents();
         
-        
-        
-        
-        
-        
     }
-
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,6 +73,7 @@ public class VistaJuego extends javax.swing.JFrame implements Observer{
         TableroP1 = new javax.swing.JPanel();
         TableroP2 = new javax.swing.JPanel();
         txtNombre = new javax.swing.JLabel();
+        lblTurno = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,13 +90,13 @@ public class VistaJuego extends javax.swing.JFrame implements Observer{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(TableroP1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(txtNombre)))
+                        .addComponent(txtNombre)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TableroP1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TableroP2, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(114, Short.MAX_VALUE))
@@ -104,8 +110,10 @@ public class VistaJuego extends javax.swing.JFrame implements Observer{
                         .addComponent(TableroP2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(32, 32, 32)
-                        .addComponent(txtNombre)
-                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                            .addComponent(lblTurno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TableroP1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -139,96 +147,204 @@ public class VistaJuego extends javax.swing.JFrame implements Observer{
                 matriz.addCasilla(casilla); 
             }
         }
-        
-        
     }
     
-public void iniciarTablero2(){
-        
-        TableroP2.setLayout(new GridLayout(10, 10));
-        
-        for (int fila = 0; fila < 10; fila++) {
-            for (int col = 0; col < 10; col++) {
-                CasillaDTO casilla = new CasillaDTO(new CoordenadasDTO(fila, col)); // casilla extiende de jpanel
-                
-                casilla.setPreferredSize(new Dimension(20, 20)); // para el tama;o de la casilla
-                casilla.setBackground(Color.WHITE); // para el color de la casilla 
-                casilla.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // creamos lineas negras en las casillas
-                
-                int f = fila;
-                int c = col;
+    public void iniciarTablero2(){
+        TableroP2.setLayout(new GridLayout(tabSize, tabSize));
+
+        for (int fila = 0; fila < tabSize; fila++) {
+            for (int col = 0; col < tabSize; col++) {
+                CasillaDTO casilla = new CasillaDTO(new CoordenadasDTO(fila, col));
+
+                casilla.setPreferredSize(new Dimension(20, 20));
+                casilla.setBackground(Color.WHITE);
+                casilla.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                casilla.setEnabled(false); // Inicialmente deshabilitada
+
+                final int currentFila = fila;
+                final int currentCol = col;
+                final CasillaDTO finalCasilla = casilla;
 
                 casilla.addMouseListener(new MouseAdapter() {
-                    Timer timer;
-
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (e.getClickCount() == 1) {
-                            System.out.println("Atacaste");
+                        if (turno && finalCasilla.isEnabled()) {
+                            System.out.println("Atacaste la casilla: (" + currentFila + ", " + currentCol + ")");
+                            // **AQUÍ GUARDAS LA ÚLTIMA COORDENADA DISPARADA**
+                            ultimaCoordenadaDisparada = new CoordenadasDTO(currentFila, currentCol);
+                            presentador.disparar(new DisparoDTO(ultimaCoordenadaDisparada, ResultadoENUM.PENDIENTE));
+                            finalCasilla.setEnabled(false); // Deshabilita la casilla inmediatamente
+                            // Opcional: Podrías deshabilitar todo el TableroP2 si quieres evitar más clics hasta la respuesta
+                            // habilitarDeshabilitarTablero2(false);
+                        } else if (!turno) {
+                            JOptionPane.showMessageDialog(TableroP2, "Aún no es tu turno de atacar", "Incorrecto", JOptionPane.WARNING_MESSAGE);
                         }
                     }
                 });
                 TableroP2.add(casilla);
-                matriz.addCasilla(casilla); 
+                // Si MatrizDTO no está diseñada para el tablero enemigo, esta línea podría ser redundante aquí.
+                // matriz.addCasilla(casilla);
             }
         }
-        
-        
+//        TableroP2.setLayout(new GridLayout(10, 10));
+//        
+//        for (int fila = 0; fila < 10; fila++) {
+//            for (int col = 0; col < 10; col++) {
+//                CasillaDTO casilla = new CasillaDTO(new CoordenadasDTO(fila, col)); // casilla extiende de jpanel
+//                
+//                casilla.setPreferredSize(new Dimension(20, 20)); // para el tama;o de la casilla
+//                casilla.setBackground(Color.WHITE); // para el color de la casilla 
+//                casilla.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // creamos lineas negras en las casillas
+//                
+//                int f = fila;
+//                int c = col;
+//
+//                casilla.addMouseListener(new MouseAdapter() {
+//                    Timer timer;
+//
+//                    @Override
+//                    public void mouseClicked(MouseEvent e) {
+//                        if (e.getClickCount() == 1) {
+//                            if(turno){
+//                                System.out.println("Atacaste la casilla: " );
+//                            }else{
+//                                JOptionPane.showMessageDialog(TableroP2, "Aun no es tu turno de atacar", "Incorrecto", JOptionPane.WARNING_MESSAGE);
+//                            }
+//                        }
+//                    }
+//                });
+//                TableroP2.add(casilla);
+//                matriz.addCasilla(casilla); 
+//            }
+//        }
     }    
+    
     public void pintar(){
-        if(jugador.getFlotilla()!=null){
-            for(NaveConfigDTO nave: jugador.getFlotilla()){
-                System.out.println(jugador.getFlotilla().size());
-                int tamanio = 0;
-                
-                CasillaDTO casilla = matriz.obtenerCasillaByCoord(nave.getCoordenadaInicial());
-                if (nave.getTipo().contains("Barco")) {
-                    tamanio = 1;
-                } else if (nave.getTipo().contains("Crucero")) {
-                    tamanio = 3;
-                } else if (nave.getTipo().contains("Submarino")) {
-                    tamanio =2;
-                } else if (nave.getTipo().contains("PortaAviones")) {
-                    tamanio = 4;
-                }
-                // Determinar dirección
-                int dx = 0, dy = 0;
-                if (nave.getOrientacion() == OrientacionENUM.HORIZONTAL) {
-                    dx = 0;
-                    dy = 1;
-                } else { // VERTICAL
-                    dx = 1;
-                    dy = 0;
-                }
+        if (jugador == null || jugador.getFlotilla() == null || jugador.getFlotilla().isEmpty()) {
+            System.out.println("No hay jugador o flotilla para pintar.");
+            return; // No hay nada que pintar
+        }
 
-                List<CasillaDTO> casillasOcupadas = new ArrayList<>();
+        System.out.println("Intentando pintar " + jugador.getFlotilla().size() + " naves.");
 
-                // Verificar y recolectar casillas válidas
-                boolean valido = true;
-                for (int i = 0; i < tamanio; i++) {
-                    int f = casilla.getX() + i * dx;
-                    int c = casilla.getY() + i * dy;
-                    if (f >= 10 || c >= 10) {
-                        valido = false;
-                        break;
+        // Obtener el color del jugador, convertirlo a un objeto Color
+        Color playerColor = parseColor(jugador.getColor());
+        if (playerColor == null) {
+            System.err.println("Advertencia: No se pudo determinar el color del jugador. Usando GRIS por defecto.");
+            playerColor = Color.GRAY; // Color por defecto si falla la conversión
+        }
+
+
+        for (NaveConfigDTO nave : jugador.getFlotilla()) {
+            int tamanio = 0;
+            // Usar 'equalsIgnoreCase' para ser más robusto a mayúsculas/minúsculas
+            if (nave.getTipo().equalsIgnoreCase("Barco")) {
+                tamanio = 1; // Ajusta el tamaño real de tu Barco si es diferente
+            } else if (nave.getTipo().equalsIgnoreCase("Crucero")) {
+                tamanio = 3;
+            } else if (nave.getTipo().equalsIgnoreCase("Submarino")) {
+                tamanio = 2;
+            } else if (nave.getTipo().equalsIgnoreCase("PortaAviones")) {
+                tamanio = 4;
+            } else {
+                System.err.println("Advertencia: Tipo de nave desconocido: " + nave.getTipo());
+                continue; // Saltar esta nave si el tipo no es reconocido
+            }
+
+            int dx = 0; // Cambio en fila para orientación
+            int dy = 0; // Cambio en columna para orientación
+
+            if (nave.getOrientacion() == OrientacionENUM.HORIZONTAL) {
+                dx = 0;
+                dy = 1; // Se mueve en columna para HORIZONTAL
+            } else if (nave.getOrientacion() == OrientacionENUM.VERTICAL) {
+                dx = 1; // Se mueve en fila para VERTICAL
+                dy = 0;
+            } else {
+                System.err.println("Advertencia: Orientación de nave desconocida para " + nave.getTipo());
+                continue;
+            }
+
+            CoordenadasDTO coordInicial = nave.getCoordenadaInicial();
+            if (coordInicial == null) {
+                System.err.println("La coordenada inicial de la nave es nula: " + nave.getTipo());
+                continue; // Saltar esta nave si la coordenada inicial es nula
+            }
+
+            System.out.println("Pintando nave: " + nave.getTipo() +
+                               " desde (" + coordInicial.getCoordenadasX() + ", " + coordInicial.getCoordenadasY() + ")" +
+                               ", tamaño: " + tamanio + ", orientacion: " + nave.getOrientacion());
+
+            for (int i = 0; i < tamanio; i++) {
+                int fila = coordInicial.getCoordenadasX() + i * dx;
+                int columna = coordInicial.getCoordenadasY() + i * dy;
+
+                if (fila >= 0 && fila < tabSize && columna >= 0 && columna < tabSize) {
+                    int index = fila * tabSize + columna; // Cálculo de índice correcto
+                    if (index < TableroP1.getComponentCount()) {
+                        Component comp = TableroP1.getComponent(index);
+                        if (comp instanceof CasillaDTO) {
+                            CasillaDTO celda = (CasillaDTO) comp;
+                            celda.setBackground(playerColor); // Usa el Color convertido
+                            celda.repaint(); // Fuerza el repintado de la casilla
+                            System.out.println("Pintada celda: (" + fila + ", " + columna + ")");
+                        } else {
+                            System.err.println("Error: El componente en el índice " + index + " no es una CasillaDTO.");
+                        }
+                    } else {
+                        System.err.println("Error: Índice " + index + " fuera de los límites de componentes de TableroP1 (" + TableroP1.getComponentCount() + ").");
                     }
-                    //los "10" son las filas y columnas, tmbn podemos poner una variable en algun lado para definirlas
-                    CasillaDTO celda = (CasillaDTO) TableroP1.getComponent(f * 10 + c);
-                    if (celda.getNaveOcupante() != null) {
-                        valido = false;
-                        break;
-                    }
-
-                    casillasOcupadas.add(celda);
-                }
-
-                // Si es válido, pintar y asignar nave
-                if (valido) {
-                    for (CasillaDTO c : casillasOcupadas) {
-                        c.setBackground(Color.getColor(jugador.getColor()));
-                    }
+                } else {
+                    System.err.println("Coordenada fuera de los límites del tablero: (" + fila + ", " + columna + ") para nave " + nave.getTipo());
                 }
             }
+            System.out.println("----- Nave " + nave.getTipo() + " terminada. -----");
+        }
+        TableroP1.revalidate(); // Asegura que el layout se revalide
+        TableroP1.repaint();   // Fuerza el repintado del panel completo
+    }
+
+    /**
+     * Convierte una cadena de texto (nombre de color o código hexadecimal) a un objeto Color.
+     * @param colorString El nombre del color (ej. "RED", "BLUE") o el código hexadecimal (ej. "#FF0000").
+     * @return Un objeto Color, o null si la cadena no es reconocida.
+     */
+    private Color parseColor(String colorString) {
+        if (colorString == null || colorString.trim().isEmpty()) {
+            return null;
+        }
+        colorString = colorString.trim();
+
+        // Intentar parsear como color predefinido
+        switch (colorString.toUpperCase()) {
+            case "RED": return Color.RED;
+            case "BLUE": return Color.BLUE;
+            case "GREEN": return Color.GREEN;
+            case "YELLOW": return Color.YELLOW;
+            case "ORANGE": return Color.ORANGE;
+            case "PINK": return Color.PINK;
+            case "CYAN": return Color.CYAN;
+            case "MAGENTA": return Color.MAGENTA;
+            case "BLACK": return Color.BLACK;
+            case "WHITE": return Color.WHITE;
+            case "GRAY": return Color.GRAY;
+            case "LIGHT_GRAY": return Color.LIGHT_GRAY;
+            case "DARK_GRAY": return Color.DARK_GRAY;
+            // Puedes añadir más si tu aplicación usa nombres de color personalizados
+        }
+
+        // Intentar parsear como código hexadecimal
+        try {
+            // Eliminar "#" si está presente, y luego parsear
+            if (colorString.startsWith("#")) {
+                return Color.decode(colorString);
+            } else {
+                // Asumir que es un hexadecimal sin "#" (ej. "FF0000")
+                return Color.decode("#" + colorString);
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Error al parsear color hexadecimal: " + colorString + " - " + e.getMessage());
+            return null; // Falló el parseo hexadecimal
         }
     }
     
@@ -236,26 +352,139 @@ public void iniciarTablero2(){
     public void update(Observable o, Object arg) {
         if (arg instanceof Mensajes) {
             String comando = (String) ((Mensajes) arg).getComando();
-            
+
             if (comando.equals("JUGADORES_LISTOS")) {
                 System.out.println("Entramos a abrir la ventana");
                 this.setVisible(true);
-                iniciarTablero1();
-//                iniciarTablero2();
-                pintar();
+                if (!tablerosInicializados) {
+                    iniciarTablero1();
+                    iniciarTablero2();
+                    tablerosInicializados = true;
+                }
+                if (jugador != null) {
+                    pintar();
+                }
                 txtNombre.setText(presentadorJuego.getNombre());
             }
+
             if(comando.equals("CONFIGURACION_RECIBIDA")){
                 ResConfiguracionRecibida res = (ResConfiguracionRecibida) arg;
                 this.jugador = presentadorJuego.getJugador();
-                
+                if (this.matriz.getJugador() == null || !this.matriz.getJugador().equals(this.jugador)) {
+                    this.matriz = new MatrizDTO(this.jugador);
+                    if (tablerosInicializados) {
+                        pintar();
+                    }
+                }
+                this.repaint();
+            }
+
+            if(comando.equals("TURNO")){
+                System.out.println("Si llegó el comando TURNO");
+                ResTurno tur = (ResTurno) arg;
+                boolean esMiTurno = (jugador != null && tur.getJugadorEnTurno().getNombre().equalsIgnoreCase(jugador.getNombre()));
+                System.out.println(tur.getJugadorEnTurno().getNombre() + " y " + jugador.getNombre() + ". Resultado: " + esMiTurno);
+                System.out.println("Se supone que es el turno de: " + tur.getJugadorEnTurno().getNombre() + "con id: " + tur.getJugadorEnTurno().getId());
+                turno = esMiTurno; // Establece la variable de instancia 'turno'
+
+                lblTurno.setText("Turno de: " + tur.getJugadorEnTurno().getNombre());
+                JOptionPane.showMessageDialog(this, "Es el turno de: " + tur.getJugadorEnTurno().getNombre(), "Turno", JOptionPane.INFORMATION_MESSAGE);
+
+                // Habilita o deshabilita TableroP2 según el turno
+                habilitarDeshabilitarTablero2(esMiTurno);
+                ultimaCoordenadaDisparada = null; // Reinicia la última coordenada disparada al cambiar el turno.
+                                                 // Esto es importante para evitar pintar incorrectamente si un jugador se desconecta, etc.
+            }
+
+            if(comando.equals("AGUA")){
+                System.out.println("No dio, ni modo: AGUA");
+                ResDisparo dis = (ResDisparo) arg;
+                // Usa la última coordenada que tu cliente disparó
+                if (ultimaCoordenadaDisparada != null) {
+                    pintarCasillaTablero2(ultimaCoordenadaDisparada, Color.BLACK); // Agua: Negro
+                } else {
+                    System.err.println("Error: No se encontró la última coordenada disparada para AGUA.");
+                }
+                boolean esMiTurno = (jugador != null && dis.getJugadorEnTurno().getNombre().equalsIgnoreCase(jugador.getNombre()));
+                turno = esMiTurno;
+            }
+
+            if(comando.equals("IMPACTO")){
+                System.out.println("Sí dio: IMPACTO");
+                ResDisparo dis = (ResDisparo) arg;
+                // Usa la última coordenada que tu cliente disparó
+                if (ultimaCoordenadaDisparada != null) {
+                    pintarCasillaTablero2(ultimaCoordenadaDisparada, Color.YELLOW); // Impacto: Amarillo
+                } else {
+                    System.err.println("Error: No se encontró la última coordenada disparada para IMPACTO.");
+                }
+                boolean esMiTurno = (jugador != null && dis.getJugadorEnTurno().getNombre().equalsIgnoreCase(jugador.getNombre()));
+                turno = esMiTurno;
+            }
+
+            if(comando.equals("NAVE_HUNDIDA")){
+                System.out.println("Nave Hundida!");
+                ResNaveHundida nav = (ResNaveHundida) arg;
+                List<CoordenadasDTO> coordsHundida = nav.getCoordenadas();
+                for (CoordenadasDTO coord : coordsHundida) {
+                    pintarCasillaTablero2(coord, Color.RED); // Nave Hundida: Rojo
+                }
+            }
+        }
+    }
+    
+    /**
+     * Habilita o deshabilita la interacción con las casillas del TableroP2.
+     * Solo las casillas no impactadas (blancas) se habilitan.
+     * @param enabled true para habilitar, false para deshabilitar.
+     */
+    private void habilitarDeshabilitarTablero2(boolean enabled) {
+        for (int i = 0; i < TableroP2.getComponentCount(); i++) {
+            Component comp = TableroP2.getComponent(i);
+            if (comp instanceof CasillaDTO) {
+                CasillaDTO casilla = (CasillaDTO) comp;
+                // Solo habilita si la casilla está en su estado inicial (blanco)
+                if (casilla.getBackground().equals(Color.WHITE)) {
+                    casilla.setEnabled(enabled);
+                } else {
+                    // Si ya está pintada (impactada), siempre permanece deshabilitada
+                    casilla.setEnabled(false);
+                }
             }
         }
     }
 
+    /**
+     * Pinta una casilla específica en el TableroP2 y la deshabilita.
+     * @param coordenadas Las coordenadas de la casilla a pintar.
+     * @param color El color con el que pintar la casilla.
+     */
+    public void pintarCasillaTablero2(CoordenadasDTO coordenadas, Color color) {
+        if (coordenadas != null) {
+            int fila = coordenadas.getCoordenadasX();
+            int col = coordenadas.getCoordenadasY();
+
+            if (fila >= 0 && fila < tabSize && col >= 0 && col < tabSize) {
+                int index = fila * tabSize + col;
+                if (index < TableroP2.getComponentCount()) {
+                    CasillaDTO celda = (CasillaDTO) TableroP2.getComponent(index);
+                    celda.setBackground(color);
+                    celda.repaint(); // Asegura que el cambio de color sea visible
+                    celda.setEnabled(false); // Deshabilita la casilla una vez que ha sido impactada
+                } else {
+                    System.out.println("Índice de componente fuera de límites en TableroP2: " + index);
+                }
+            } else {
+                System.out.println("Coordenadas fuera de límites en TableroP2: (" + fila + ", " + col + ")");
+            }
+        }
+    }
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel TableroP1;
     private javax.swing.JPanel TableroP2;
+    private javax.swing.JLabel lblTurno;
     private javax.swing.JLabel txtNombre;
     // End of variables declaration//GEN-END:variables
 }

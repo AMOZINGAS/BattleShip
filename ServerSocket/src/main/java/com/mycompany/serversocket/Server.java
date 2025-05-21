@@ -11,7 +11,9 @@ import java.util.concurrent.Executors;
 import mensajes.Mensajes;
 import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
+import mensajes.ResDisparo;
 import mensajes.ResJugadoresListosConfigurado;
+import mensajes.ResTurno;
 import mensajes.ResUnirse;
 
 /**
@@ -78,6 +80,18 @@ public class Server {
                 client.sendMessage(mensaje);
             }
         }else if(mensaje instanceof ResConfiguracionRecibida){
+            for(ManejadorCliente client: clients){
+                if(client == sender){
+                    client.sendMessage(mensaje);
+                }
+            }
+        }else if(mensaje instanceof ResTurno){
+            for(ManejadorCliente client: clients){
+                if(client == sender){
+                    client.sendMessage(mensaje);
+                }
+            }
+        }else if(mensaje instanceof ResDisparo){
             for(ManejadorCliente client: clients){
                 if(client == sender){
                     client.sendMessage(mensaje);

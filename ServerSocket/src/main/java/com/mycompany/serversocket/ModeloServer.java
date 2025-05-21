@@ -5,9 +5,12 @@
 package com.mycompany.serversocket;
 
 import capaLogica.excepciones.ServerLogicException;
+import dtos.CoordenadasDTO;
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.NaveConfigDTO;
 import dtos.OrientacionENUM;
+import entity.Casilla;
 import entity.Coordenada;
 import entity.EnCursoEstado;
 import entity.INaveFactory;
@@ -16,6 +19,7 @@ import entity.Jugador;
 import entity.Nave;
 import entity.NaveFactory;
 import entity.Orientacion;
+import entity.Resultado;
 import entity.SinConfiguracion;
 import entity.Tablero;
 import java.util.ArrayList;
@@ -24,11 +28,14 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.concurrent.ConcurrentHashMap;
 import mensajes.Mensajes;
+import mensajes.ReqDisparo;
 import mensajes.ReqRegistrarJugadorConfig;
 import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
+import mensajes.ResDisparo;
 import mensajes.ResEspera;
 import mensajes.ResJuegoIniciado;
+import mensajes.ResNaveHundida;
 
 /**
  *
@@ -43,26 +50,39 @@ public class ModeloServer extends Observable{
         List<NaveConfigDTO> navesDTO = req.getConfigNaves();
         juego.registrarJugador(jugadorDTO, navesDTO);
     }
-        
     
-
-//    public void jugadorListoParaJugar(Jugador jugador, Juego juego){
-//        System.out.println("Controlador: Jugador " + jugador.getNombre() + " esta listo.");
-//        jugadoresListos.put(jugador, true);
-//
-//    }
-//    private boolean estanTodosJugadoresListos() {
-//        if(jugadoresListos.size() <= 1){
-//            return false;
-//        }
-//
-//        for (boolean listo : jugadoresListos.values()) {
-//            if (!listo) {
-//                return false; //Si al menos un jugador no está listo, es false
-//            }
-//        }
-//        return true; //Todos los jugadores están listos
-//    }
+    public void disparar(Juego juego, Mensajes mensaje){
+        ReqDisparo req = (ReqDisparo) mensaje;
+        DisparoDTO disparo = req.getDisparo();
+        try{
+            Coordenada coordenada = new Coordenada(disparo.getCoordenadas().getCoordenadasX(), disparo.getCoordenadas().getCoordenadasY());
+            juego.procesarDisparo(juego.getJugadorEnTurno(), coordenada);
+            if(juego.getDisparos().getLast().getResultado().equals(Resultado.AGUA)){
+                setChanged();
+                notifyObservers(new ResDisparo("AGUA", new JugadorDTO(juego.getJugadorEnTurno().getNombre(), juego.getJugadorEnTurno().getColor())));
+                System.out.println("MS - notificando agua");
+            }else{
+                setChanged();
+                notifyObservers(new ResDisparo("IMPACTO", new JugadorDTO(juego.getJugadorEnTurno().getNombre(), juego.getJugadorEnTurno().getColor())));
+                System.out.println("MS - notificando impacto");
+            }
+            
+            //Si la nave se hundió
+            Tablero tableroObjetivo = (juego.getJugadorEnTurno() == juego.getJugador1()) ? juego.getTableroJugador2() : juego.getTableroJugador1();
+            Nave nave = tableroObjetivo.obtenerNaveEnCasilla(coordenada);
+            if(nave != null && nave.estaHundida()){
+                setChanged();
+                List<CoordenadasDTO> coords = new ArrayList<>();
+                for (Casilla casilla : tableroObjetivo.obtenerNaveEnCasilla(coordenada).getCasillas()) {
+                    coords.add(new CoordenadasDTO(casilla.getCoordenada().getX(), casilla.getCoordenada().getY()));
+                }
+                notifyObservers(new ResNaveHundida(coords));
+            }
+        }catch(ServerLogicException e){
+            System.out.println("Error al disparar en el server :(");
+        }
+        
+    }
 
     public void crearPartida(Juego juego, Mensajes mensaje){
 
@@ -74,6 +94,5 @@ public class ModeloServer extends Observable{
 
         juego.unirse();
 
-    }
-    
+    }    
 }

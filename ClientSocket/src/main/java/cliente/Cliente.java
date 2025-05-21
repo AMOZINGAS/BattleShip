@@ -4,6 +4,7 @@
  */
 package cliente;
 
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.NaveConfigDTO;
 import mensajes.Mensajes;
@@ -17,6 +18,7 @@ import java.net.Socket;
 import java.rmi.UnknownHostException;
 import java.util.List;
 import mensajes.ReqCrearPartida;
+import mensajes.ReqDisparo;
 import mensajes.ReqRegistrarJugadorConfig;
 
 /**
@@ -83,6 +85,10 @@ public class Cliente {
     
     public void registrarJugadorConfig(JugadorDTO jugador, List<NaveConfigDTO> flotilla){
         sendMessage(new ReqRegistrarJugadorConfig(jugador, flotilla));
+    }
+    
+    public void disparar(DisparoDTO disparo){
+        sendMessage(new ReqDisparo(disparo));
     }
 
     private class MessageListener implements Runnable {

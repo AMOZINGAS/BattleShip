@@ -5,6 +5,7 @@
 package mvpMenu;
 
 import cliente.Cliente;
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.NaveConfigDTO;
 import java.util.List;
@@ -58,6 +59,12 @@ public class ModeloMenu extends Observable{
         }
     }
     
+    public void disparar(DisparoDTO disparo){
+        if (cliente.isConnected()) {
+            cliente.disparar(disparo);
+        }
+    }
+    
      public void notificar(Mensajes message) {
 
         System.out.println("Estoy obteniendo un: " + message.getComando());
@@ -88,6 +95,14 @@ public class ModeloMenu extends Observable{
                 notifyObservers(message);
                 break;
             case "JUGADORES_LISTOS":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "AGUA":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "IMPACTO":
                 setChanged();
                 notifyObservers(message);
                 break;

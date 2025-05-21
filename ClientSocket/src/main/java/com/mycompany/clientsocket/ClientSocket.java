@@ -34,7 +34,7 @@ public class ClientSocket {
         VistaMenu vistaMenu = new VistaMenu(controladorMenu);
         VistaConfiguracion vistaConf = new VistaConfiguracion(controladorMenu);
         FrmSalaDeEspera vistaEspera = new FrmSalaDeEspera(controladorMenu);
-        VistaJuego vistJuego = new VistaJuego(controlJuego);
+        VistaJuego vistJuego = new VistaJuego(controlJuego, controladorMenu);
         
         modeloMenu.addObserver(vistaMenu);
         modeloMenu.addObserver(vistaConf);

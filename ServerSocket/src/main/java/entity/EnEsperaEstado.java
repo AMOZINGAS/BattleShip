@@ -17,19 +17,19 @@ public class EnEsperaEstado implements StateJuego{
 
     @Override
     public void manejarEstado(Juego juego) {
-        //1. Agregamos los tableros si no han sido creados
-        if(juego.getTableroJugador1() == null || juego.getTableroJugador2() == null){
-            juego.setTableroJugador1(new Tablero(juego.getJugador1()));
-            juego.setTableroJugador2(new Tablero(juego.getJugador2()));
-        }
+//        //1. Agregamos los tableros si no han sido creados
+//        if(juego.getTableroJugador1() == null || juego.getTableroJugador2() == null){
+//            juego.setTableroJugador1(new Tablero(juego.getJugador1()));
+//            juego.setTableroJugador2(new Tablero(juego.getJugador2()));
+//        }
         
         //2. Verificación de las naves de ambos jugadores
         // Si ya estan colocadas se pasa al siguiente estado
         try{
             if (todasNavesColocadas(juego)) {
-                juego.setEstado(new EnCursoEstado());
-                juego.getInstance();
+                juego.iniciarPartida();
                 System.out.println(juego.getJugadorEnTurno().getNombre() + " empieza.");
+                juego.setEstado(new EnCursoEstado());
             }
         }catch(ServerLogicException sle){
             System.err.println("Error: " + sle.getMessage());
@@ -38,7 +38,7 @@ public class EnEsperaEstado implements StateJuego{
     
     private boolean todasNavesColocadas(Juego juego) throws ServerLogicException {        
         //1. Validación de ambos jugadores existentes
-        if(juego.getJugador1() == null || juego.getJugador2() == null){
+        if(juego.getJugadoresListos().size() < 1){
             return false;
         }
         
@@ -51,7 +51,7 @@ public class EnEsperaEstado implements StateJuego{
     }
     
     private boolean contarNaves(List<Nave> naves) throws ServerLogicException{
-        if(naves.isEmpty() || naves.size() != 5){
+        if(naves.isEmpty() || naves.size() != 11){
             throw new ServerLogicException("11 Naves requeridas. Encontradas: " + naves.size());
         }
         
@@ -70,7 +70,7 @@ public class EnEsperaEstado implements StateJuego{
                 numBarcos++;
             }
         }
-        if (numPortaAviones == 1 && numCruceros == 1 && numSubmarinos == 1 && numBarcos == 2){
+        if (numPortaAviones == 2 && numCruceros == 2 && numSubmarinos == 4 && numBarcos == 3){
             return true;
         }else{
             throw new ServerLogicException("La cantidad de naves colocadas es incorrecta. ");

@@ -4,10 +4,22 @@
  */
 package mensajes;
 
+import dtos.JugadorDTO;
+
 /**
  *
  * @author Amos Heli Olguin Quiroz
  */
-public class ResDisparo {
+public class ResDisparo extends Mensajes{
+    private JugadorDTO jugadorEnTurno;
+    
+    public ResDisparo(String comando, JugadorDTO jugadorEnTurno) {
+        super(comando);
+        this.jugadorEnTurno = jugadorEnTurno;
+    }
+
+    public JugadorDTO getJugadorEnTurno() {
+        return jugadorEnTurno;
+    }    
     
 }

@@ -4,6 +4,7 @@
  */
 package mvpMenu;
 
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.NaveConfigDTO;
 import java.util.List;
@@ -32,6 +33,10 @@ public class PresentadorMenu {
     
     public void registrarJugadorConfig(JugadorDTO jugador, List<NaveConfigDTO> flotilla){
         modeloMenu.registrarJugadorConfig(jugador, flotilla);
+    }
+    
+    public void disparar(DisparoDTO disparo){
+        modeloMenu.disparar(disparo);
     }
     
 }

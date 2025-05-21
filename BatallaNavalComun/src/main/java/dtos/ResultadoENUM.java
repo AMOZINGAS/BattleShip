@@ -9,7 +9,7 @@ package dtos;
  * @author CISCO
  */
 public enum ResultadoENUM {
-    
+    PENDIENTE,
     AGUA,
     IMPACTO
     

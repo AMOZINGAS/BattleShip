@@ -5,6 +5,7 @@
 package mensajes;
 
 import dtos.CoordenadasDTO;
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 
 /**
@@ -13,22 +14,15 @@ import dtos.JugadorDTO;
  */
 public class ReqDisparo extends Mensajes {
     
-    private JugadorDTO jugador;
-    private CoordenadasDTO coordenadas;
+    private final DisparoDTO disparo;
     
-    public ReqDisparo(JugadorDTO jugador, CoordenadasDTO coordenadas) {
+    public ReqDisparo(DisparoDTO disparo) {
         super("REALIZAR_DISPARO");
-        this.jugador = jugador;
-        this.coordenadas = coordenadas;
-    }
-    
-    public JugadorDTO getJugador() {
-        return jugador;
-    }
+        this.disparo = disparo;
+    }  
 
-    public CoordenadasDTO getCoordenadas(){
-        return coordenadas;
+    public DisparoDTO getDisparo() {
+        return disparo;
     }
-    
     
 }

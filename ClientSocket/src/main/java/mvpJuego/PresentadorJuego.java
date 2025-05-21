@@ -4,6 +4,7 @@
  */
 package mvpJuego;
 
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 
 /**

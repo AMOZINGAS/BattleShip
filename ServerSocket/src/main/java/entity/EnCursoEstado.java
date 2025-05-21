@@ -62,7 +62,7 @@ public class EnCursoEstado implements StateJuego{
     
     private void cambiarTurno(Juego juego) {
         juego.setJugadorEnTurno((juego.getJugadorEnTurno() == juego.getJugador1()) ? juego.getJugador2() : juego.getJugador1());
-        juego.getGestorTurnos().terminarTurno();
+//        juego.getGestorTurnos().terminarTurno();
     }
     
     private boolean coordenadaFueraDeTablero(Coordenada coordenada) {

@@ -45,10 +45,10 @@ public class Juego extends Observable{
     public Juego() {
         this.jugadores = new ArrayList<>();
         this.jugadoresDTO = new ArrayList<>();
-//        this.tableros = new ArrayList<>();
+        this.tableros = new ArrayList<>();
         this.estado = new SinConfiguracion();
 //        this.gestorTurnos = new GestorTurnos(this);
-//        this.disparos = new ArrayList<>();
+        this.disparos = new ArrayList<>();
     }
     
     
@@ -63,6 +63,7 @@ public class Juego extends Observable{
      public void jugadorListo(Jugador jugador){
         System.out.println("Controlador: Jugador " + jugador.getNombre() + " esta listo.");
         jugadoresListos.put(jugador, true);
+        tableros.add(jugador.getTableroPropio());
 
     }
     private boolean isJugadoresListos() {
@@ -77,7 +78,6 @@ public class Juego extends Observable{
         }
         return true; //Todos los jugadores están listos
     }
-     
     
      public void registrarJugador(JugadorDTO jugadorDTO, List<NaveConfigDTO> configuracionNaves){
         if(this.jugadores.size()<2){
@@ -140,8 +140,13 @@ public class Juego extends Observable{
                         notifyObservers(new ResConfiguracionRecibida("CONFIGURACION_RECIBIDA", jugadorDTO));
 
                         if(isJugadoresListos()){
-                            setChanged();
-                            notifyObservers(new ResJugadoresListosConfigurado("JUGADORES_LISTOS", jugadoresDTO));
+                            iniciarPartida();
+//                            setChanged();
+//                            notifyObservers(new ResJugadoresListosConfigurado("JUGADORES_LISTOS", jugadoresDTO));
+//                            estado.manejarEstado(this);
+//                            //Dar el turno
+//                            setChanged();
+//                            notifyObservers(new ResTurno(new JugadorDTO(jugadorEnTurno.getNombre(), jugadorEnTurno.getColor())));
                         }
                         
                     } catch (ServerLogicException e) {
@@ -168,8 +173,6 @@ public class Juego extends Observable{
             throw new ServerLogicException("No se puede procesar el disparo en el estado actual del juego");
         }
     }
-    
-    
     
     public boolean esGameOver(){
         return tableros.get(0).estanTodasNavesHundidas() || tableros.get(1).estanTodasNavesHundidas();
@@ -221,10 +224,11 @@ public class Juego extends Observable{
         if (this.estado instanceof EnEsperaEstado && jugadores.size() == 2) {
             this.estado = new EnCursoEstado();
             this.jugadorEnTurno = determinarJugadorInicial();
+            estado.manejarEstado(this);
             setChanged();
-            notifyObservers(new ResJuegoIniciado("JUEGO_INICIADO"));
+            notifyObservers(new ResJugadoresListosConfigurado("JUGADORES_LISTOS", jugadoresDTO));
             setChanged();
-            notifyObservers(new ResTurno(jugadorEnTurno.getNombre()));
+            notifyObservers(new ResTurno(new JugadorDTO(jugadorEnTurno.getNombre(), jugadorEnTurno.getColor())));
             System.out.println("Juego: Partida iniciada. Turno de " + jugadorEnTurno.getNombre());
         } else {
             System.out.println("Juego: No se puede iniciar la partida. Estado: " + this.estado + ", Jugadores: " + jugadores.size());
@@ -234,14 +238,16 @@ public class Juego extends Observable{
     
     public synchronized Jugador determinarJugadorInicial() {
         if (!jugadores.isEmpty()) {
-            Random random = new Random();
-            jugadorEnTurno = jugadores.get(random.nextInt(jugadores.size()));
+            jugadorEnTurno = jugadores.getLast();
+            System.out.println("Jugadores: " + jugadores.size());
+            System.out.println("Jugador en turno: " + jugadores.getFirst());
             return jugadorEnTurno;
         }
         return null;
     }
     
-    public void addJugador(Jugador jugador){
+    public void addJugador(Jugador jugador, int id){
+        jugador.setId(id);
         jugadores.add(jugador);
     }
     
@@ -299,5 +305,17 @@ public class Juego extends Observable{
 
     public void setGestorTurnos(GestorTurnos gestorTurnos) {
         this.gestorTurnos = gestorTurnos;
+    }
+
+    public List<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    public Map<Jugador, Boolean> getJugadoresListos() {
+        return jugadoresListos;
+    }
+
+    public ArrayList<Tablero> getTableros() {
+        return tableros;
     }
 }

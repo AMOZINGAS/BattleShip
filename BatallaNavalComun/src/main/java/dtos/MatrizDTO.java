@@ -30,7 +30,6 @@ public class MatrizDTO extends JPanel{
     }
 
     public CasillaDTO obtenerCasillaByCoord(CoordenadasDTO coord){
-        System.out.println("se va a buscar por: " + coord.x +  ", " + coord.y);
        CasillaDTO casillaBuscar = new CasillaDTO(coord);
        for(CasillaDTO casilla: casillas){
            if(casilla.getCoordenada().getCoordenadasX() == (casillaBuscar.getCoordenada().getCoordenadasX()) && casilla.getCoordenada().getCoordenadasY() == (casillaBuscar.getCoordenada().getCoordenadasY())){
@@ -63,6 +62,10 @@ public class MatrizDTO extends JPanel{
 //        this.jugador = jugador;
 //    }
 //    
+
+    public JugadorDTO getJugador() {
+        return jugador;
+    }
     
     
 }

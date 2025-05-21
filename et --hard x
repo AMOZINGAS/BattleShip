@@ -1,0 +1,19 @@
+[33m97d983f[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m sender, listener y Connection
+[33m468a383[m x
+[33m781d8c6[m otro avance
+[33m0530ede[m avance config naves en servidor
+[33me04bd41[m avance del pasar de estado con las naves colocadas
+[33m6f6316a[m validación de configuración
+[33mafce803[m Se creo eliminar y mover barcos en el tablero, ademas de agregar el color y el comando para configurar jugadores con ayuda de Co-authored-by: JAlbertoPalma <jesus.palma247910@potros.itson.edu.mx>
+[33mbb4dea6[m arrastrar nave
+[33mcb86d16[m Modificacion
+[33mb9d1e3c[m Se terminaron la conexion junto con los observers, el sistema ya se conecta mediante 2 dispositivos y puedes viajar del menu al menu de configuracion mediante peticiones
+[33mf3da0a5[m se modificaron todos los proyectos para que esten acomodados por arquitectura de capas, los sockets tanto del servidor como del cliente ya funcionan
+[33maa12869[m Logica del servidor v1.0 - Se puede probar
+[33mec79587[m Avance Servidor - Capa Lógica
+[33m96f79e4[m[33m ([m[1;31morigin/SocketBranch[m[33m)[m hice el proyecto BatallaNaval y movi los DTO y las pantallas ahi
+[33m2cea89c[m Se agregaron algunos metodos de get y set ademas de los atributos
+[33m5a9d048[m Se agregaron las clases bases
+[33mba09462[m Server and cliente empty files
+[33m81b56ad[m Diagrama de clases
+[33m9afb3f3[m Inicializacion

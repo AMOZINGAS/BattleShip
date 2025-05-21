@@ -30,21 +30,25 @@ public class MensajesAdaptador implements JsonSerializer<Mensajes>, JsonDeserial
 
         try {
             Class<? extends Mensajes> messageClass = switch (comando) {
-                    // requestsss
-                    case "CREAR_PARTIDA" -> ReqCrearPartida.class;
-                    case "UNIRSE" -> ReqUnirse.class;
-                    case "REGISTRAR_JUGADOR_CONFIGURACION" -> ReqRegistrarJugadorConfig.class;
-                    case "SOLICITAR_INICIO" -> ReqSolicitarInicio.class;
-                    
-                        
-                    // Response
-                    case "JUEGO_INICIADO", "JUEGO_NO_INICIADO" -> ResJuegoIniciado.class;
-                    case "JUGADORES_LISTOS" -> ResJugadoresListosConfigurado.class;
-                    case "JUGADOR_UNIDO", "JUGADOR_NO_UNIDO" -> ResUnirse.class;
-                    case "PARTIDA_CREADA", "PARTIDA_NO_CREADA" -> ResCrearPartida.class;
-                    case "ESPERANDO_OPONENTE" -> ResRegistrarJugador.class; 
-                    case "CONFIGURACION_RECIBIDA" -> ResConfiguracionRecibida.class;
-                    default -> throw new JsonParseException("Comando desconocido: " + comando);
+                // requestsss
+                case "CREAR_PARTIDA" -> ReqCrearPartida.class;
+                case "UNIRSE" -> ReqUnirse.class;
+                case "REGISTRAR_JUGADOR_CONFIGURACION" -> ReqRegistrarJugadorConfig.class;
+                case "SOLICITAR_INICIO" -> ReqSolicitarInicio.class;
+                case "REALIZAR_DISPARO" -> ReqDisparo.class;
+
+
+                // Response
+                case "JUEGO_INICIADO", "JUEGO_NO_INICIADO" -> ResJuegoIniciado.class;
+                case "JUGADORES_LISTOS" -> ResJugadoresListosConfigurado.class;
+                case "JUGADOR_UNIDO", "JUGADOR_NO_UNIDO" -> ResUnirse.class;
+                case "PARTIDA_CREADA", "PARTIDA_NO_CREADA" -> ResCrearPartida.class;
+                case "ESPERANDO_OPONENTE" -> ResRegistrarJugador.class; 
+                case "CONFIGURACION_RECIBIDA" -> ResConfiguracionRecibida.class;
+                case "TURNO" -> ResTurno.class;
+                case "AGUA, IMPACTO" -> ResDisparo.class;
+                case "NAVE_HUNDIDA" -> ResNaveHundida.class;
+                default -> throw new JsonParseException("Comando desconocido: " + comando);
             };
 
             return context.deserialize(json, messageClass);

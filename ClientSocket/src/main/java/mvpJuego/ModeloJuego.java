@@ -7,6 +7,7 @@ package mvpJuego;
 import cliente.Cliente;
 import dtos.CasillaDTO;
 import dtos.CoordenadasDTO;
+import dtos.DisparoDTO;
 import dtos.JugadorDTO;
 import dtos.NaveDTO;
 import java.awt.Color;
@@ -22,6 +23,7 @@ import javax.swing.Timer;
 import mensajes.Mensajes;
 import mensajes.ResConfiguracionRecibida;
 import mensajes.ResJugadoresListosConfigurado;
+import mensajes.ResTurno;
 
 /**
  *
@@ -84,6 +86,23 @@ public class ModeloJuego extends Observable{
             case "CONFIGURACION_RECIBIDA":
                 ResConfiguracionRecibida res = (ResConfiguracionRecibida) message;
                 this.jugador = res.getJugador();
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "AGUA":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "IMPACTO":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "NAVE_HUNDIDA":
+                setChanged();
+                notifyObservers(message);
+                break;
+            case "TURNO":
+//                ResTurno tur = (ResTurno) message;
                 setChanged();
                 notifyObservers(message);
                 break;

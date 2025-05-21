@@ -7,9 +7,12 @@ package cliente;
 import mensajes.Mensajes;
 import mensajes.ResConfiguracionRecibida;
 import mensajes.ResCrearPartida;
+import mensajes.ResDisparo;
 import mensajes.ResJuegoIniciado;
 import mensajes.ResJugadoresListosConfigurado;
+import mensajes.ResNaveHundida;
 import mensajes.ResRegistrarJugador;
+import mensajes.ResTurno;
 import mensajes.ResUnirse;
 import mvpJuego.ModeloJuego;
 import mvpMenu.ModeloMenu;
@@ -51,6 +54,27 @@ public class ManejadorRespuesta {
         
         if(mensaje instanceof ResConfiguracionRecibida){
             ResConfiguracionRecibida res = (ResConfiguracionRecibida) mensaje;
+            modeloMenu.notificar(res);
+            modeloJuego.notificar(res);
+            return;
+        }
+        
+        if(mensaje instanceof ResTurno){
+            ResTurno res = (ResTurno) mensaje;
+            modeloMenu.notificar(res);
+            modeloJuego.notificar(res);
+            return;
+        }
+        
+        if(mensaje instanceof ResDisparo){
+            ResDisparo res = (ResDisparo) mensaje;
+            modeloMenu.notificar(res);
+            modeloJuego.notificar(res);
+            return;
+        }
+        
+        if(mensaje instanceof ResNaveHundida){
+            ResNaveHundida res = (ResNaveHundida) mensaje;
             modeloMenu.notificar(res);
             modeloJuego.notificar(res);
             return;

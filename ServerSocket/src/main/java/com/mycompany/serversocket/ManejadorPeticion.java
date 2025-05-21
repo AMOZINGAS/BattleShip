@@ -58,6 +58,12 @@ public class ManejadorPeticion {
             case "REGISTRAR_JUGADOR_CONFIGURACION":
                 handleRegistrarJugadorConfig((ReqRegistrarJugadorConfig)(mensaje));
                 break;
+            case "JUGADORES_LISTOS":
+                handleRegistrarJugadorConfig((ReqRegistrarJugadorConfig)(mensaje));
+                break;
+            case "REALIZAR_DISPARO":
+                handleDisparo((ReqDisparo)(mensaje));
+                break;
             default:
                 System.out.println("Comando desconocido: " + mensaje.getComando());
         }
@@ -73,6 +79,10 @@ public class ManejadorPeticion {
     
     private void handleRegistrarJugadorConfig(ReqRegistrarJugadorConfig mensaje) {
         controlador.registrarJugador(mensaje, clientHandler);
+    }
+    
+    private void handleDisparo(ReqDisparo mensaje) {
+        controlador.Disparar(mensaje, clientHandler);
     }
     
 }
